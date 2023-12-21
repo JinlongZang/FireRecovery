@@ -34,9 +34,9 @@ var FPAR5km_1999 = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
                   .filter(ee.Filter.date('1999-01-01', '1999-12-31')).select('FAPAR').median().multiply(0.25);
 //30m火烧像元
 var loss_due_to_fire = ee.ImageCollection('users/sashatyu/2001-2022_fire_forest_loss_annual').mosaic();
-var loss_due_to_fire2019_ = loss_due_to_fire.updateMask(loss_due_to_fire.lt(20));
+var loss_due_to_fire2019 = loss_due_to_fire.updateMask(loss_due_to_fire.lt(20));
 //计算恢复时间
-var recover_time = loss_due_to_fire2019_.multiply(-1).add(20).uint8();
+var recover_time = loss_due_to_fire2019.multiply(-1).add(20).uint8();
 //Map.addLayer(recover_time,{min: 1, max: 19, palette: ['yellow', 'red']},'recover_time');
 
 //canada_USA的1984-2019年的火烧像元
