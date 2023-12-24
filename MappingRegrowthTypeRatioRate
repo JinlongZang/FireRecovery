@@ -32,6 +32,24 @@ var FPAR5km_1996 = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
                   .filter(ee.Filter.date('1996-01-01', '1996-12-31')).select('FAPAR').median().multiply(0.25);
 var FPAR5km_1999 = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
                   .filter(ee.Filter.date('1999-01-01', '1999-12-31')).select('FAPAR').median().multiply(0.25);
+var resample = function(image) {var resampledImage = image.resample('bilinear').reproject({crs: 'EPSG:4326',scale: 30});return resampledImage;};
+var LAI250m_2000 = resample(LAI250m_2000_);var LAI250m_2001 = resample(LAI250m_2001_);var LAI250m_2004 = resample(LAI250m_2004_);
+var LAI250m_2005 = resample(LAI250m_2005_);var LAI250m_2006 = resample(LAI250m_2006_);var LAI250m_2009 = resample(LAI250m_2009_);
+var LAI250m_2010 = resample(LAI250m_2010_);var LAI250m_2011 = resample(LAI250m_2011_);var LAI250m_2015 = resample(LAI250m_2015_);
+var LAI250m_2016 = resample(LAI250m_2016_);var LAI250m_2019 = resample(LAI250m_2019_);var LAI250m_2020 = resample(LAI250m_2020_);
+var LAI250m_2021 = resample(LAI250m_2021_);
+var FPAR250m_2000 = resample(FPAR250m_2000_);var FPAR250m_2001 = resample(FPAR250m_2001_);var FPAR250m_2004 = resample(FPAR250m_2004_);
+var FPAR250m_2005 = resample(FPAR250m_2005_);var FPAR250m_2006 = resample(FPAR250m_2006_);var FPAR250m_2009 = resample(FPAR250m_2009_);
+var FPAR250m_2010 = resample(FPAR250m_2010_);var FPAR250m_2011 = resample(FPAR250m_2011_);var FPAR250m_2015 = resample(FPAR250m_2015_);
+var FPAR250m_2016 = resample(FPAR250m_2016_);var FPAR250m_2019 = resample(FPAR250m_2019_);var FPAR250m_2020 = resample(FPAR250m_2020_);
+var FPAR250m_2021 = resample(FPAR250m_2021_);
+var LAI5km_1985 = resample(LAI5km_1985_);var LAI5km_1986 = resample(LAI5km_1986_);var LAI5km_1989 = resample(LAI5km_1989_);
+var LAI5km_1990 = resample(LAI5km_1990_);var LAI5km_1991 = resample(LAI5km_1991_);var LAI5km_1994 = resample(LAI5km_1994_);
+var LAI5km_1995 = resample(LAI5km_1995_);var LAI5km_1999 = resample(LAI5km_1999_);
+var FPAR5km_1985 = resample(FPAR5km_1985_);var FPAR5km_1986 = resample(FPAR5km_1986_);var FPAR5km_1989 = resample(FPAR5km_1989_);
+var FPAR5km_1990 = resample(FPAR5km_1990_);var FPAR5km_1991 = resample(FPAR5km_1991_);var FPAR5km_1994 = resample(FPAR5km_1994_);
+var FPAR5km_1995 = resample(FPAR5km_1995_);var FPAR5km_1999 = resample(FPAR5km_1999_);
+
 //30m火烧像元
 var loss_due_to_fire = ee.ImageCollection('users/sashatyu/2001-2022_fire_forest_loss_annual').mosaic();
 var loss_due_to_fire2019 = loss_due_to_fire.updateMask(loss_due_to_fire.lt(20));
@@ -59,7 +77,8 @@ Map.addLayer(recover_time_canada_USA2,{min: 1, max: 36, palette: ['yellow', 'red
 var FNF3data = ee.ImageCollection("JAXA/ALOS/PALSAR/YEARLY/FNF")
                   .filterDate('2007-01-01', '2007-12-31')
                   .select('fnf');
-var FNF3 = FNF3data.qualityMosaic('fnf');
+var FNF3_ = FNF3data.qualityMosaic('fnf');
+var FNF3 = resample(FNF3_);
 //1_forest; 2_Non Forest; 3_Water
 var forest_2007 = FNF3.updateMask(FNF3.eq(1));
 var forest_fire = loss_due_to_fire2019.updateMask(forest_2007.mask());
@@ -69,7 +88,8 @@ var canada_USA_forest_fire = recover_time_canada_USA2.updateMask(forest_2007.mas
 var FNF4 = ee.ImageCollection('JAXA/ALOS/PALSAR/YEARLY/FNF4')
                   .filterDate('2020-01-01', '2020-12-31')
                   .select('fnf');
-var FNF = FNF4.qualityMosaic('fnf');
+var FNF_ = FNF4.qualityMosaic('fnf');
+var FNF = resample(FNF_);
 //1_Dense forest; 2_Non-dence Forest; 3_Non-forest; 4_Water;有缺失部分用2007补充并暂定为非密集森林
 var forest_2020_loss_scene = FNF.updateMask(FNF.lte(2));
 var loss_scene = forest_2007.clip(geometry2);
