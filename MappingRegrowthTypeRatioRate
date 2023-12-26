@@ -116,8 +116,8 @@ var canada_USA_nonforest_recover20 = canada_USA_nonforest_recover.where(canada_U
 var canada_USA_recover_type2020 = ee.ImageCollection([canada_USA_dence_forest_recover10, canada_USA_nondence_forest_recover15, canada_USA_nonforest_recover20]).mosaic();
 var canada_USA_recover_type_forest = ee.ImageCollection([canada_USA_dence_forest_recover10, canada_USA_nondence_forest_recover15]).mosaic();
 
-////**map forest height and AGB regowth ratio**
 //****SE_Asia****
+//map forest height and AGB regowth ratio
 var forest_height2000= ee.Image("projects/glad/GLCLU2020/Forest_height_2000").select("b1");
 var forest_height2020= ee.Image("projects/glad/GLCLU2020/Forest_height_2020").select("b1");
 var height_2020 = forest_height2020.updateMask(recover_type_forest.mask());
@@ -177,7 +177,7 @@ var height_recover_rate2005 = frt2005.multiply(b).exp().multiply(a).multiply(b).
 var AGB_recover_rate2005 = frt2005.multiply(b).exp().multiply(d).multiply(a).multiply(b).multiply(e).multiply
       (frt2005.multiply(b).exp().multiply(a).add(c).pow(e - 1)).add(0.1).multiply(10).toUint8();
 
-//**map forest LAI and FPAR regrowth ratio
+//map forest LAI and FPAR regrowth ratio
 //2020
 var LAI_recover2020 = LAI250m_2020.updateMask(forest_recover_time.mask()).toUint8();
 var FPAR_recover2020 = FPAR250m_2020.updateMask(forest_recover_time.mask()).toUint8();
@@ -199,7 +199,7 @@ var FPAR_recover2005 = FPAR250m_2005.updateMask(frt2005.mask()).toUint8();
 var LAI_recover2005_ratio = LAI_recover2005.float().divide(LAI250m_2000.float()).multiply(100).toUint8().updateMask(LAI_recover2005.mask());
 var FPAR_recover2005_ratio = FPAR_recover2005.float().divide(FPAR250m_2000.float()).multiply(100).toUint8().updateMask(FPAR_recover2005.mask());
 
-//**map forest LAI and FPAR regrowth rate
+//map forest LAI and FPAR regrowth rate
 var LAI_recover2021 = LAI250m_2021.updateMask(forest_recover_time.mask()).toUint8();
 var LAI_recover2019 = LAI250m_2019.updateMask(forest_recover_time.mask()).toUint8();
 var LAI_recover2016 = LAI250m_2016.updateMask(frt2015.mask()).toUint8();
@@ -282,49 +282,40 @@ for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < la
     var export4 = {image: clipped_FPAR_regrowth,description: 'SE_Asia_FPAR_regrowth_' + direction,
     folder: 'SE_Asia_FPAR_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export4);}}
 
-////Australia
-//var points_Australia = ee.FeatureCollection.randomPoints(Australia, 150000);
-//var height_Values_Australia = height_2020.reduceRegions({collection: points_Australia,reducer: ee.Reducer.mean(),scale: 30,});
-//var recovertime_Values_Australia = forest_recover_time.reduceRegions({collection: points_Australia,reducer: ee.Reducer.mean(),scale: 30,});
-//导出建立恢复时间高度关系公式
-//Export.table.toDrive({collection:height_Values_Australia,folder:"Fire_random",description: "Australia_height",fileNamePrefix: "Australia_height",});
-//Export.table.toDrive({collection:recovertime_Values_Australia,folder:"Fire_random",description: "Australia_recovertime",fileNamePrefix: "Australia_recovertime",});
-
-//**参数设置**
+//****Australia****
+//map forest height and AGB regowth ratio
 var a = -15.58; var b = -0.1498; var c = 18.01; var d = 0.0353; var e = 2.1506;
 var AGB_2000_reference= forest_height2000.updateMask(height_2020.mask()).pow(e).multiply(d).multiply(10);
 //2020
 var height_2020_my_ = forest_recover_time.multiply(b).exp().multiply(a).add(c).toUint8();
 var height_2020_my = height_2020_my_.updateMask(height_2020_my_.gt(2));
 var height_recover2020_ratio = height_2020.float().divide(forest_height2000.float()).multiply(100).toUint8().updateMask(height_2020.mask());
-var AGB_2020_=  height_2020.pow(e).multiply(d).add(0.1).multiply(10).toUint8();//乘了10倍，加0.1为了避免出现0值
+var AGB_2020_=  height_2020.pow(e).multiply(d).add(0.1).multiply(10).toUint8();
 var AGB_2020 = AGB_2020_.updateMask(AGB_2020_.gt(0));
 var AGB_recover2020_ratio = AGB_2020.float().divide(AGB_2000_reference.float()).multiply(100).toUint8().updateMask(AGB_2020.mask());
 //2015
 var height_2015_ = frt2015.multiply(b).exp().multiply(a).add(c).toUint8();
 var height_2015 = height_2015_.updateMask(height_2015_.gt(2));
 var height_recover2015_ratio = height_2015.float().divide(forest_height2000.float()).multiply(100).toUint8().updateMask(height_2015.mask());
-var AGB_2015_=  height_2015.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();//乘了10倍，加0.1为了避免出现0值
+var AGB_2015_=  height_2015.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();
 var AGB_2015 = AGB_2015_.updateMask(AGB_2015_.gt(0));
 var AGB_recover2015_ratio = AGB_2015.float().divide(AGB_2000_reference.float()).multiply(100).toUint8().updateMask(AGB_2015.mask());
 //2010
 var height_2010_ = frt2010.multiply(b).exp().multiply(a).add(c).toUint8();
 var height_2010 = height_2010_.updateMask(height_2010_.gt(2));
 var height_recover2010_ratio = height_2010.float().divide(forest_height2000.float()).multiply(100).toUint8().updateMask(height_2010.mask());
-var AGB_2010_=  height_2010.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();//乘了10倍，加0.1为了避免出现0值
+var AGB_2010_=  height_2010.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();
 var AGB_2010 = AGB_2010_.updateMask(AGB_2010_.gt(0));
 var AGB_recover2010_ratio = AGB_2010.float().divide(AGB_2000_reference.float()).multiply(100).toUint8().updateMask(AGB_2010.mask());
 //2005
 var height_2005_ = frt2005.multiply(b).exp().multiply(a).add(c).toUint8();
 var height_2005 = height_2005_.updateMask(height_2005_.gt(2));
 var height_recover2005_ratio = height_2005.float().divide(forest_height2000.float()).multiply(100).toUint8().updateMask(height_2005.mask());
-var AGB_2005_=  height_2005.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();//乘了10倍，加0.1为了避免出现0值
+var AGB_2005_=  height_2005.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();
 var AGB_2005 = AGB_2005_.updateMask(AGB_2005_.gt(0));
 var AGB_recover2005_ratio = AGB_2005.float().divide(AGB_2000_reference.float()).multiply(100).toUint8().updateMask(AGB_2005.mask());
-//制图恢复速率（高度和生物量）放大了10倍
-//高度公式求导后f(x) = 2.3339*e^(-0.1498t)   // -15.58e^(-0.1498t)+18.01
-//生物量与恢复时间公式f(x) =  0.0353(-15.58e^(-0.1498t)+18.01)^2.1506
-//上式求导后= 0.0353*2.3339*2.1506*(-15.58e^(-0.1498t)+18.01)^1.1506*e^(-0.1498t) = 0.1772(-15.58e^(-0.1498t)+18.01)^1.1506*e^(-0.1498t)
+
+//map forest height and AGB regowth rate
 //2020
 var height_recover_rate2020 = forest_recover_time.multiply(b).exp().multiply(a).multiply(b).add(0.1).multiply(10).toUint8();
 var AGB_recover_rate2020 = forest_recover_time.multiply(b).exp().multiply(d).multiply(a).multiply(b).multiply(e).multiply
@@ -341,14 +332,8 @@ var AGB_recover_rate2010 = frt2010.multiply(b).exp().multiply(d).multiply(a).mul
 var height_recover_rate2005 = frt2005.multiply(b).exp().multiply(a).multiply(b).add(0.1).multiply(10).toUint8();
 var AGB_recover_rate2005 = frt2005.multiply(b).exp().multiply(d).multiply(a).multiply(b).multiply(e).multiply
       (frt2005.multiply(b).exp().multiply(a).add(c).pow(e - 1)).add(0.1).multiply(10).toUint8();
-//生成随机点验证2020高度
-//var points_Australia1 = ee.FeatureCollection.randomPoints(Australia, 70000);
-//var height_my = height_2020_my.reduceRegions({collection: points_Australia1,reducer: ee.Reducer.mean(),scale: 30});
-//var height_his = height_2020.reduceRegions({collection: points_Australia1,reducer: ee.Reducer.mean(),scale: 30});
-//导出my和his高度
-//Export.table.toDrive({collection:height_my,folder:"Fire_height_validation2020",description: "Australia_height_my",});
-//Export.table.toDrive({collection:height_his,folder:"Fire_height_validation2020",description: "Australia_height_his"});
-//导出
+
+//add bands
 var height_regrowth = recover_type2020.addBands([
                     height_recover2020_ratio, height_recover2015_ratio, height_recover2010_ratio, height_recover2005_ratio,
                     height_recover_rate2020, height_recover_rate2015, height_recover_rate2010, height_recover_rate2005,]).rename([
@@ -361,15 +346,10 @@ var AGB_regrowth = recover_type2020.addBands([
                     'Regrowth_type_2020',
                     'AGB_regrowth_ratio_2020', 'AGB_regrowth_ratio_2015', 'AGB_regrowth_ratio_2010', 'AGB_regrowth_ratio_2005',
                     'AGB_regrowth_rate_2020', 'AGB_regrowth_rate_2015', 'AGB_regrowth_rate_2010', 'AGB_regrowth_rate_2005',]);
-// 导出影像500
-//Export.image.toDrive({image: height_regrowth,description: 'Australia_height_regrowth500',folder: 'Australia_regrowth_fire',region: Australia,scale: 500,crs: 'EPSG:4326', maxPixels: 1e13,});
-//Export.image.toDrive({image: AGB_regrowth, description: 'Australia_AGB_regrowth500',folder: 'Australia_regrowth_fire',region: Australia,scale: 500,crs: 'EPSG:4326', maxPixels: 1e13,});  
-//Export.image.toDrive({image: LAI_regrowth,description: 'Australia_LAI_regrowth500',folder: 'Australia_regrowth_fire',region: Australia,scale: 500,crs: 'EPSG:4326', maxPixels: 1e13,});
-//Export.image.toDrive({image: FPAR_regrowth,description: 'Australia_FPAR_regrowth500',folder: 'Australia_regrowth_fire',region: Australia,scale: 500,crs: 'EPSG:4326', maxPixels: 1e13,}); 
 
-// 导出影像30,只选择-50_140,-40_130,-40_140,-40_150,-30_140,-30_150,-20_130,-20_140
-var lonMin = 110; var lonMax = 150;  // 起始经度 // 终止经度
-var latMin = -50; var latMax = -10;  // 起始纬度 // 终止纬度
+//export
+var lonMin = 110; var lonMax = 150;  
+var latMin = -50; var latMax = -10; 
 for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < latMax; lat += 10) {
     var blockGeometry = ee.Geometry.Rectangle([lon, lat, lon + 10, lat + 10]);
     var clipped_height_regrowth = height_regrowth.clip(blockGeometry);
@@ -387,48 +367,39 @@ for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < la
     folder: 'Australia_FPAR_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export4);}}
 
 //****Europe****
-//var points_Europe = ee.FeatureCollection.randomPoints(Europe, 300000);
-//var height_Values_Europe = height_2020.reduceRegions({collection: points_Europe,reducer: ee.Reducer.mean(),scale: 30,});
-//var recovertime_Values_Europe = forest_recover_time.reduceRegions({collection: points_Europe,reducer: ee.Reducer.mean(),scale: 30,});
-//导出建立恢复时间高度关系公式
-//Export.table.toDrive({collection:height_Values_Europe,folder:"Fire_random",description: "Europe_height",fileNamePrefix: "Europe_height",});
-//Export.table.toDrive({collection:recovertime_Values_Europe,folder:"Fire_random",description: "Europe_recovertime",fileNamePrefix: "Europe_recovertime",});
-
-//**参数设置**
+//map forest height and AGB regowth ratio
 var a = -32.60; var b = -0.0183; var c = 35.88; var d = 0.3538; var e = 1.2103;
 var AGB_2000_reference= forest_height2000.updateMask(height_2020.mask()).pow(e).multiply(d).multiply(10);
 //2020
 var height_2020_my_ = forest_recover_time.multiply(b).exp().multiply(a).add(c).toUint8();
 var height_2020_my = height_2020_my_.updateMask(height_2020_my_.gt(2));
 var height_recover2020_ratio = height_2020.float().divide(forest_height2000.float()).multiply(100).toUint8().updateMask(height_2020.mask());
-var AGB_2020_=  height_2020.pow(e).multiply(d).add(0.1).multiply(10).toUint8();//乘了10倍，加0.1为了避免出现0值
+var AGB_2020_=  height_2020.pow(e).multiply(d).add(0.1).multiply(10).toUint8();
 var AGB_2020 = AGB_2020_.updateMask(AGB_2020_.gt(0));
 var AGB_recover2020_ratio = AGB_2020.float().divide(AGB_2000_reference.float()).multiply(100).toUint8().updateMask(AGB_2020.mask());
 //2015
 var height_2015_ = frt2015.multiply(b).exp().multiply(a).add(c).toUint8();
 var height_2015 = height_2015_.updateMask(height_2015_.gt(2));
 var height_recover2015_ratio = height_2015.float().divide(forest_height2000.float()).multiply(100).toUint8().updateMask(height_2015.mask());
-var AGB_2015_=  height_2015.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();//乘了10倍，加0.1为了避免出现0值
+var AGB_2015_=  height_2015.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();
 var AGB_2015 = AGB_2015_.updateMask(AGB_2015_.gt(0));
 var AGB_recover2015_ratio = AGB_2015.float().divide(AGB_2000_reference.float()).multiply(100).toUint8().updateMask(AGB_2015.mask());
 //2010
 var height_2010_ = frt2010.multiply(b).exp().multiply(a).add(c).toUint8();
 var height_2010 = height_2010_.updateMask(height_2010_.gt(2));
 var height_recover2010_ratio = height_2010.float().divide(forest_height2000.float()).multiply(100).toUint8().updateMask(height_2010.mask());
-var AGB_2010_=  height_2010.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();//乘了10倍，加0.1为了避免出现0值
+var AGB_2010_=  height_2010.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();
 var AGB_2010 = AGB_2010_.updateMask(AGB_2010_.gt(0));
 var AGB_recover2010_ratio = AGB_2010.float().divide(AGB_2000_reference.float()).multiply(100).toUint8().updateMask(AGB_2010.mask());
 //2005
 var height_2005_ = frt2005.multiply(b).exp().multiply(a).add(c).toUint8();
 var height_2005 = height_2005_.updateMask(height_2005_.gt(2));
 var height_recover2005_ratio = height_2005.float().divide(forest_height2000.float()).multiply(100).toUint8().updateMask(height_2005.mask());
-var AGB_2005_=  height_2005.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();//乘了10倍，加0.1为了避免出现0值
+var AGB_2005_=  height_2005.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();
 var AGB_2005 = AGB_2005_.updateMask(AGB_2005_.gt(0));
 var AGB_recover2005_ratio = AGB_2005.float().divide(AGB_2000_reference.float()).multiply(100).toUint8().updateMask(AGB_2005.mask());
-//制图恢复速率（高度和生物量）放大了10倍
-//高度公式求导后f(x) = 0.5970*e^(-0.0183t)   // -32.60e^(-0.0183t)+35.88
-//生物量与恢复时间公式f(x) =  0.3538(-32.60e^(-0.0183t)+35.88)^1.2103
-//上式求导后= 0.3538*0.5970*1.2103*(-32.60e^(-0.0183t)+35.88)^0.2103*e^(-0.0183t) = 0.2556(-32.60e^(-0.1146t)+35.88)^0.2103*e^(-0.0183t)
+
+//map forest height and AGB regowth rate
 //2020
 var height_recover_rate2020 = forest_recover_time.multiply(b).exp().multiply(a).multiply(b).add(0.1).multiply(10).toUint8();
 var AGB_recover_rate2020 = forest_recover_time.multiply(b).exp().multiply(d).multiply(a).multiply(b).multiply(e).multiply
@@ -445,15 +416,8 @@ var AGB_recover_rate2010 = frt2010.multiply(b).exp().multiply(d).multiply(a).mul
 var height_recover_rate2005 = frt2005.multiply(b).exp().multiply(a).multiply(b).add(0.1).multiply(10).toUint8();
 var AGB_recover_rate2005 = frt2005.multiply(b).exp().multiply(d).multiply(a).multiply(b).multiply(e).multiply
       (frt2005.multiply(b).exp().multiply(a).add(c).pow(e - 1)).add(0.1).multiply(10).toUint8();
-//生成随机点验证2020高度
-//var points_Europe1 = ee.FeatureCollection.randomPoints(Europe, 150000);
-//var height_my = height_2020_my.reduceRegions({collection: points_Europe1,reducer: ee.Reducer.mean(),scale: 30});
-//var height_his = height_2020.reduceRegions({collection: points_Europe1,reducer: ee.Reducer.mean(),scale: 30});
-//导出my和his高度
-//Export.table.toDrive({collection:height_my,folder:"Fire_height_validation2020",description: "Europe_height_my",});
-//Export.table.toDrive({collection:height_his,folder:"Fire_height_validation2020",description: "Europe_height_his"});
 
-//导出
+//add bands
 var height_regrowth = recover_type2020.addBands([
                     height_recover2020_ratio, height_recover2015_ratio, height_recover2010_ratio, height_recover2005_ratio,
                     height_recover_rate2020, height_recover_rate2015, height_recover_rate2010, height_recover_rate2005,]).rename([
@@ -466,15 +430,10 @@ var AGB_regrowth = recover_type2020.addBands([
                     'Regrowth_type_2020',
                     'AGB_regrowth_ratio_2020', 'AGB_regrowth_ratio_2015', 'AGB_regrowth_ratio_2010', 'AGB_regrowth_ratio_2005',
                     'AGB_regrowth_rate_2020', 'AGB_regrowth_rate_2015', 'AGB_regrowth_rate_2010', 'AGB_regrowth_rate_2005',]);
-// 导出影像
-//Export.image.toDrive({image: height_regrowth,description: 'Europe_height_regrowth500',folder: 'Europe_regrowth_fire',region: Europe,scale: 500,crs: 'EPSG:4326', maxPixels: 1e13,});
-//Export.image.toDrive({image: AGB_regrowth, description: 'Europe_AGB_regrowth500',folder: 'Europe_regrowth_fire',region: Europe,scale: 500,crs: 'EPSG:4326', maxPixels: 1e13,});  
-//Export.image.toDrive({image: LAI_regrowth,description: 'Europe_LAI_regrowth500',folder: 'Europe_regrowth_fire',region: Europe,scale: 500,crs: 'EPSG:4326', maxPixels: 1e13,});
-//Export.image.toDrive({image: FPAR_regrowth,description: 'Europe_FPAR_regrowth500',folder: 'Europe_regrowth_fire',region: Europe,scale: 500,crs: 'EPSG:4326', maxPixels: 1e13,}); 
 
-// 导出影像30,排除30_0,60_-10,60_0
-var lonMin = -10; var lonMax = 30;  // 起始经度 // 终止经度
-var latMin = 30; var latMax = 70;  // 起始纬度 // 终止纬度
+//export
+var lonMin = -10; var lonMax = 30; 
+var latMin = 30; var latMax = 70; 
 for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < latMax; lat += 10) {
     var blockGeometry = ee.Geometry.Rectangle([lon, lat, lon + 10, lat + 10]);
     var clipped_height_regrowth = height_regrowth.clip(blockGeometry);
@@ -491,48 +450,40 @@ for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < la
     var export4 = {image: clipped_FPAR_regrowth,description: 'Europe_FPAR_regrowth_' + direction,
     folder: 'Europe_FPAR_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export4);}}
 
-//Eurasia
-//var points_Eurasia = ee.FeatureCollection.randomPoints(Eurasia, 200000);
-//var height_Values_Eurasia = height_2020.reduceRegions({collection: points_Eurasia,reducer: ee.Reducer.mean(),scale: 30,});
-//var recovertime_Values_Eurasia = forest_recover_time.reduceRegions({collection: points_Eurasia,reducer: ee.Reducer.mean(),scale: 30,});
-//导出建立恢复时间高度关系公式
-//Export.table.toDrive({collection:height_Values_Eurasia,folder:"Fire_random",description: "Eurasia_height",fileNamePrefix: "Eurasia_height",});
-//Export.table.toDrive({collection:recovertime_Values_Eurasia,folder:"Fire_random",description: "Eurasia_recovertime",fileNamePrefix: "Eurasia_recovertime",});
-//**参数设置**
+//****Eurasia****
+//map forest height and AGB regowth ratio
 var a = -16.81; var b = -0.3045; var c = 13.36; var d = 0.018; var e = 2.2194;
 var AGB_2000_reference= forest_height2000.updateMask(height_2020.mask()).pow(e).multiply(d).multiply(10);
 //2020
 var height_2020_my_ = forest_recover_time.multiply(b).exp().multiply(a).add(c).toUint8();
 var height_2020_my = height_2020_my_.updateMask(height_2020_my_.gt(2));
 var height_recover2020_ratio = height_2020.float().divide(forest_height2000.float()).multiply(100).toUint8().updateMask(height_2020.mask());
-var AGB_2020_=  height_2020.pow(e).multiply(d).add(0.1).multiply(10).toUint8();//乘了10倍，加0.1为了避免出现0值
+var AGB_2020_=  height_2020.pow(e).multiply(d).add(0.1).multiply(10).toUint8();
 var AGB_2020 = AGB_2020_.updateMask(AGB_2020_.gt(0));
 var AGB_recover2020_ratio = AGB_2020.float().divide(AGB_2000_reference.float()).multiply(100).toUint8().updateMask(AGB_2020.mask());
 //2015
 var height_2015_ = frt2015.multiply(b).exp().multiply(a).add(c).toUint8();
 var height_2015 = height_2015_.updateMask(height_2015_.gt(2));
 var height_recover2015_ratio = height_2015.float().divide(forest_height2000.float()).multiply(100).toUint8().updateMask(height_2015.mask());
-var AGB_2015_=  height_2015.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();//乘了10倍，加0.1为了避免出现0值
+var AGB_2015_=  height_2015.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();
 var AGB_2015 = AGB_2015_.updateMask(AGB_2015_.gt(0));
 var AGB_recover2015_ratio = AGB_2015.float().divide(AGB_2000_reference.float()).multiply(100).toUint8().updateMask(AGB_2015.mask());
 //2010
 var height_2010_ = frt2010.multiply(b).exp().multiply(a).add(c).toUint8();
 var height_2010 = height_2010_.updateMask(height_2010_.gt(2));
 var height_recover2010_ratio = height_2010.float().divide(forest_height2000.float()).multiply(100).toUint8().updateMask(height_2010.mask());
-var AGB_2010_=  height_2010.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();//乘了10倍，加0.1为了避免出现0值
+var AGB_2010_=  height_2010.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();
 var AGB_2010 = AGB_2010_.updateMask(AGB_2010_.gt(0));
 var AGB_recover2010_ratio = AGB_2010.float().divide(AGB_2000_reference.float()).multiply(100).toUint8().updateMask(AGB_2010.mask());
 //2005
 var height_2005_ = frt2005.multiply(b).exp().multiply(a).add(c).toUint8();
 var height_2005 = height_2005_.updateMask(height_2005_.gt(2));
 var height_recover2005_ratio = height_2005.float().divide(forest_height2000.float()).multiply(100).toUint8().updateMask(height_2005.mask());
-var AGB_2005_=  height_2005.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();//乘了10倍，加0.1为了避免出现0值
+var AGB_2005_=  height_2005.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();
 var AGB_2005 = AGB_2005_.updateMask(AGB_2005_.gt(0));
 var AGB_recover2005_ratio = AGB_2005.float().divide(AGB_2000_reference.float()).multiply(100).toUint8().updateMask(AGB_2005.mask());
-//制图恢复速率（高度和生物量）放大了10倍
-//高度公式求导后f(x) = 1.1376*e^(-0.3045t)   // -16.81e^(-0.3045t)+13.36
-//生物量与恢复时间公式f(x) =  0.018(-16.81e^(-0.3045t)+13.36)^2.2194
-//上式求导后= 0.018*1.1376*2.2194*(-16.81e^(-0.3045t)+13.36)^1.2194*e^(-0.3045t) = 0.0454(-16.81e^(-0.3045t)+13.36)^1.2194*e^(-0.3045t)
+
+//map forest height and AGB regowth rate
 //2020
 var height_recover_rate2020 = forest_recover_time.multiply(b).exp().multiply(a).multiply(b).add(0.1).multiply(10).toUint8();
 var AGB_recover_rate2020 = forest_recover_time.multiply(b).exp().multiply(d).multiply(a).multiply(b).multiply(e).multiply
@@ -549,15 +500,8 @@ var AGB_recover_rate2010 = frt2010.multiply(b).exp().multiply(d).multiply(a).mul
 var height_recover_rate2005 = frt2005.multiply(b).exp().multiply(a).multiply(b).add(0.1).multiply(10).toUint8();
 var AGB_recover_rate2005 = frt2005.multiply(b).exp().multiply(d).multiply(a).multiply(b).multiply(e).multiply
       (frt2005.multiply(b).exp().multiply(a).add(c).pow(e - 1)).add(0.1).multiply(10).toUint8();
-//生成随机点验证2020高度
-//var points_Eurasia1 = ee.FeatureCollection.randomPoints(Eurasia, 100000);
-//var height_my = height_2020_my.reduceRegions({collection: points_Eurasia1,reducer: ee.Reducer.mean(),scale: 30});
-//var height_his = height_2020.reduceRegions({collection: points_Eurasia1,reducer: ee.Reducer.mean(),scale: 30});
-//导出my和his高度
-//Export.table.toDrive({collection:height_my,folder:"Fire_height_validation2020",description: "Eurasia_height_my",});
-//Export.table.toDrive({collection:height_his,folder:"Fire_height_validation2020",description: "Eurasia_height_his"});
 
-//导出
+//add bands
 var height_regrowth = recover_type2020.addBands([
                     height_recover2020_ratio, height_recover2015_ratio, height_recover2010_ratio, height_recover2005_ratio,
                     height_recover_rate2020, height_recover_rate2015, height_recover_rate2010, height_recover_rate2005,]).rename([
@@ -570,15 +514,9 @@ var AGB_regrowth = recover_type2020.addBands([
                     'Regrowth_type_2020',
                     'AGB_regrowth_ratio_2020', 'AGB_regrowth_ratio_2015', 'AGB_regrowth_ratio_2010', 'AGB_regrowth_ratio_2005',
                     'AGB_regrowth_rate_2020', 'AGB_regrowth_rate_2015', 'AGB_regrowth_rate_2010', 'AGB_regrowth_rate_2005',]);
-// 导出影像
-//Export.image.toDrive({image: height_regrowth,description: 'Eurasia_height_regrowth500',folder: 'Eurasia_regrowth_fire',region: Eurasia,scale: 500,crs: 'EPSG:4326', maxPixels: 1e13,});
-//Export.image.toDrive({image: AGB_regrowth, description: 'Eurasia_AGB_regrowth500',folder: 'Eurasia_regrowth_fire',region: Eurasia,scale: 500,crs: 'EPSG:4326', maxPixels: 1e13,});  
-//Export.image.toDrive({image: LAI_regrowth,description: 'Eurasia_LAI_regrowth500',folder: 'Eurasia_regrowth_fire',region: Eurasia,scale: 500,crs: 'EPSG:4326', maxPixels: 1e13,});
-//Export.image.toDrive({image: FPAR_regrowth,description: 'Eurasia_FPAR_regrowth500',folder: 'Eurasia_regrowth_fire',region: Eurasia,scale: 500,crs: 'EPSG:4326', maxPixels: 1e13,}); 
-
-// 导出影像30,排除40_40,40_50,40_60,40_70,40_80,40_110,40_140,40_150,40_160,50_140,50_150,50_160
-var lonMin = 30; var lonMax = 170;  // 起始经度 // 终止经度
-var latMin = 40; var latMax = 70;  // 起始纬度 // 终止纬度
+//export area1
+var lonMin = 30; var lonMax = 170;  
+var latMin = 40; var latMax = 70; 
 for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < latMax; lat += 10) {
     var blockGeometry = ee.Geometry.Rectangle([lon, lat, lon + 10, lat + 10]);
     var clipped_height_regrowth = height_regrowth.clip(blockGeometry);
@@ -595,9 +533,9 @@ for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < la
     var export4 = {image: clipped_FPAR_regrowth,description: 'Eurasia_east_FPAR_regrowth_' + direction,
     folder: 'Eurasia_east_FPAR_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export4);}}
 
-// 导出影像30,排除30_80,30_90
-var lonMin = 80; var lonMax = 120;  // 起始经度 // 终止经度
-var latMin = 20; var latMax = 40;  // 起始纬度 // 终止纬度
+//export area2
+var lonMin = 80; var lonMax = 120; 
+var latMin = 20; var latMax = 40; 
 for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < latMax; lat += 10) {
     var blockGeometry = ee.Geometry.Rectangle([lon, lat, lon + 10, lat + 10]);
     var clipped_height_regrowth = height_regrowth.clip(blockGeometry);
@@ -614,48 +552,40 @@ for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < la
     var export4 = {image: clipped_FPAR_regrowth,description: 'Eurasia_east_FPAR_regrowth_' + direction,
     folder: 'Eurasia_east_FPAR_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export4);}}
 
-//South_America
-//var points_South_America = ee.FeatureCollection.randomPoints(South_America, 200000);
-//var height_Values_South_America = height_2020.reduceRegions({collection: points_South_America,reducer: ee.Reducer.mean(),scale: 30,});
-//var recovertime_Values_South_America = forest_recover_time.reduceRegions({collection: points_South_America,reducer: ee.Reducer.mean(),scale: 30,});
-//导出建立恢复时间高度关系公式
-//Export.table.toDrive({collection:height_Values_South_America,folder:"Fire_random",description: "South_America_height",fileNamePrefix: "South_America_height",});
-//Export.table.toDrive({collection:recovertime_Values_South_America,folder:"Fire_random",description: "South_America_recovertime",fileNamePrefix: "South_America_recovertime",});
-//**参数设置**
+//****South_America****
+//map forest height and AGB regowth ratio
 var a = -25.06; var b = -0.1602; var c = 18.01; var d = 0.0541; var e = 1.894;
 var AGB_2000_reference= forest_height2000.updateMask(height_2020.mask()).pow(e).multiply(d).multiply(10);
 //2020
 var height_2020_my_ = forest_recover_time.multiply(b).exp().multiply(a).add(c).toUint8();
 var height_2020_my = height_2020_my_.updateMask(height_2020_my_.gt(2));
 var height_recover2020_ratio = height_2020.float().divide(forest_height2000.float()).multiply(100).toUint8().updateMask(height_2020.mask());
-var AGB_2020_=  height_2020.pow(e).multiply(d).add(0.1).multiply(10).toUint8();//乘了10倍，加0.1为了避免出现0值
+var AGB_2020_=  height_2020.pow(e).multiply(d).add(0.1).multiply(10).toUint8();
 var AGB_2020 = AGB_2020_.updateMask(AGB_2020_.gt(0));
 var AGB_recover2020_ratio = AGB_2020.float().divide(AGB_2000_reference.float()).multiply(100).toUint8().updateMask(AGB_2020.mask());
 //2015
 var height_2015_ = frt2015.multiply(b).exp().multiply(a).add(c).toUint8();
 var height_2015 = height_2015_.updateMask(height_2015_.gt(2));
 var height_recover2015_ratio = height_2015.float().divide(forest_height2000.float()).multiply(100).toUint8().updateMask(height_2015.mask());
-var AGB_2015_=  height_2015.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();//乘了10倍，加0.1为了避免出现0值
+var AGB_2015_=  height_2015.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();
 var AGB_2015 = AGB_2015_.updateMask(AGB_2015_.gt(0));
 var AGB_recover2015_ratio = AGB_2015.float().divide(AGB_2000_reference.float()).multiply(100).toUint8().updateMask(AGB_2015.mask());
 //2010
 var height_2010_ = frt2010.multiply(b).exp().multiply(a).add(c).toUint8();
 var height_2010 = height_2010_.updateMask(height_2010_.gt(2));
 var height_recover2010_ratio = height_2010.float().divide(forest_height2000.float()).multiply(100).toUint8().updateMask(height_2010.mask());
-var AGB_2010_=  height_2010.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();//乘了10倍，加0.1为了避免出现0值
+var AGB_2010_=  height_2010.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();
 var AGB_2010 = AGB_2010_.updateMask(AGB_2010_.gt(0));
 var AGB_recover2010_ratio = AGB_2010.float().divide(AGB_2000_reference.float()).multiply(100).toUint8().updateMask(AGB_2010.mask());
 //2005
 var height_2005_ = frt2005.multiply(b).exp().multiply(a).add(c).toUint8();
 var height_2005 = height_2005_.updateMask(height_2005_.gt(2));
 var height_recover2005_ratio = height_2005.float().divide(forest_height2000.float()).multiply(100).toUint8().updateMask(height_2005.mask());
-var AGB_2005_=  height_2005.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();//乘了10倍，加0.1为了避免出现0值
+var AGB_2005_=  height_2005.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();
 var AGB_2005 = AGB_2005_.updateMask(AGB_2005_.gt(0));
 var AGB_recover2005_ratio = AGB_2005.float().divide(AGB_2000_reference.float()).multiply(100).toUint8().updateMask(AGB_2005.mask());
-//制图恢复速率（高度和生物量）放大了10倍
-//高度公式求导后f(x) = 4.0146*e^(-0.1602t)   // -25.06e^(-0.1602t)+18.01
-//生物量与恢复时间公式f(x) =  0.0541(-25.06e^(-0.1602t)+18.01)^1.894
-//上式求导后= 0.0541*4.0146*1.894*(-25.06e^(-0.1602t)+18.01)^0.894*e^(-0.1602t) = 0.4114(-25.06e^(-0.1602t)+18.01)^0.894*e^(-0.1602t)
+
+//map forest height and AGB regowth rate
 //2020
 var height_recover_rate2020 = forest_recover_time.multiply(b).exp().multiply(a).multiply(b).add(0.1).multiply(10).toUint8();
 var AGB_recover_rate2020 = forest_recover_time.multiply(b).exp().multiply(d).multiply(a).multiply(b).multiply(e).multiply
@@ -672,15 +602,8 @@ var AGB_recover_rate2010 = frt2010.multiply(b).exp().multiply(d).multiply(a).mul
 var height_recover_rate2005 = frt2005.multiply(b).exp().multiply(a).multiply(b).add(0.1).multiply(10).toUint8();
 var AGB_recover_rate2005 = frt2005.multiply(b).exp().multiply(d).multiply(a).multiply(b).multiply(e).multiply
       (frt2005.multiply(b).exp().multiply(a).add(c).pow(e - 1)).add(0.1).multiply(10).toUint8();
-//生成随机点验证2020高度
-//var points_South_America1 = ee.FeatureCollection.randomPoints(South_America, 100000);
-//var height_my = height_2020_my.reduceRegions({collection: points_South_America1,reducer: ee.Reducer.mean(),scale: 30});
-//var height_his = height_2020.reduceRegions({collection: points_South_America1,reducer: ee.Reducer.mean(),scale: 30});
-//导出my和his高度
-//Export.table.toDrive({collection:height_my,folder:"Fire_height_validation2020",description: "South_America_height_my",});
-//Export.table.toDrive({collection:height_his,folder:"Fire_height_validation2020",description: "South_America_height_his"});
 
-//导出
+//add bands
 var height_regrowth = recover_type2020.addBands([
                     height_recover2020_ratio, height_recover2015_ratio, height_recover2010_ratio, height_recover2005_ratio,
                     height_recover_rate2020, height_recover_rate2015, height_recover_rate2010, height_recover_rate2005,]).rename([
@@ -693,15 +616,10 @@ var AGB_regrowth = recover_type2020.addBands([
                     'Regrowth_type_2020',
                     'AGB_regrowth_ratio_2020', 'AGB_regrowth_ratio_2015', 'AGB_regrowth_ratio_2010', 'AGB_regrowth_ratio_2005',
                     'AGB_regrowth_rate_2020', 'AGB_regrowth_rate_2015', 'AGB_regrowth_rate_2010', 'AGB_regrowth_rate_2005',]);
-// 导出影像
-//Export.image.toDrive({image: height_regrowth,description: 'South_America_height_regrowth500',folder: 'South_America_regrowth_fire',region: South_America,scale: 500,crs: 'EPSG:4326', maxPixels: 1e13,});
-//Export.image.toDrive({image: AGB_regrowth, description: 'South_America_AGB_regrowth500',folder: 'South_America_regrowth_fire',region: South_America,scale: 500,crs: 'EPSG:4326', maxPixels: 1e13,});  
-//Export.image.toDrive({image: LAI_regrowth,description: 'South_America_LAI_regrowth500',folder: 'South_America_regrowth_fire',region: South_America,scale: 500,crs: 'EPSG:4326', maxPixels: 1e13,});
-//Export.image.toDrive({image: FPAR_regrowth,description: 'South_America_FPAR_regrowth500',folder: 'South_America_regrowth_fire',region: South_America,scale: 500,crs: 'EPSG:4326', maxPixels: 1e13,}); 
 
-// 导出影像30,排除-30_-80,-30_-40,0_-50,0_-40
-var lonMin = -80; var lonMax = -30;  // 起始经度 // 终止经度
-var latMin = -30; var latMax = 10;  // 起始纬度 // 终止纬度
+//export area1
+var lonMin = -80; var lonMax = -30; 
+var latMin = -30; var latMax = 10; 
 for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < latMax; lat += 10) {
     var blockGeometry = ee.Geometry.Rectangle([lon, lat, lon + 10, lat + 10]);
     var clipped_height_regrowth = height_regrowth.clip(blockGeometry);
@@ -718,9 +636,9 @@ for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < la
     var export4 = {image: clipped_FPAR_regrowth,description: 'South_America_FPAR_regrowth_' + direction,
     folder: 'South_America_FPAR_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export4);}}
 
-// 导出影像30
-var lonMin = -110; var lonMax = -80;  // 起始经度 // 终止经度
-var latMin = 10; var latMax = 30;  // 起始纬度 // 终止纬度
+//export area2
+var lonMin = -110; var lonMax = -80; 
+var latMin = 10; var latMax = 30; 
 for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < latMax; lat += 10) {
     var blockGeometry = ee.Geometry.Rectangle([lon, lat, lon + 10, lat + 10]);
     var clipped_height_regrowth = height_regrowth.clip(blockGeometry);
@@ -737,48 +655,40 @@ for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < la
     var export4 = {image: clipped_FPAR_regrowth,description: 'South_America_FPAR_regrowth_' + direction,
     folder: 'South_America_FPAR_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export4);}}
 
-//Africa
-//var points_Africa = ee.FeatureCollection.randomPoints(Africa, 500000);
-//var height_Values_Africa = height_2020.reduceRegions({collection: points_Africa,reducer: ee.Reducer.mean(),scale: 30,});
-//var recovertime_Values_Africa = forest_recover_time.reduceRegions({collection: points_Africa,reducer: ee.Reducer.mean(),scale: 30,});
-//导出建立恢复时间高度关系公式
-//Export.table.toDrive({collection:height_Values_Africa,folder:"Fire_random",description: "Africa_height",fileNamePrefix: "Africa_height",});
-//Export.table.toDrive({collection:recovertime_Values_Africa,folder:"Fire_random",description: "Africa_recovertime",fileNamePrefix: "Africa_recovertime",});
-//**参数设置**
+//****Africa****
+//map forest height and AGB regowth ratio
 var a = -10.48; var b = -0.1469; var c = 13.01; var d = 0.0251; var e = 2.12;
 var AGB_2000_reference= forest_height2000.updateMask(height_2020.mask()).pow(e).multiply(d).multiply(10);
 //2020
 var height_2020_my_ = forest_recover_time.multiply(b).exp().multiply(a).add(c).toUint8();
 var height_2020_my = height_2020_my_.updateMask(height_2020_my_.gt(2));
 var height_recover2020_ratio = height_2020.float().divide(forest_height2000.float()).multiply(100).toUint8().updateMask(height_2020.mask());
-var AGB_2020_=  height_2020.pow(e).multiply(d).add(0.1).multiply(10).toUint8();//乘了10倍，加0.1为了避免出现0值
+var AGB_2020_=  height_2020.pow(e).multiply(d).add(0.1).multiply(10).toUint8();
 var AGB_2020 = AGB_2020_.updateMask(AGB_2020_.gt(0));
 var AGB_recover2020_ratio = AGB_2020.float().divide(AGB_2000_reference.float()).multiply(100).toUint8().updateMask(AGB_2020.mask());
 //2015
 var height_2015_ = frt2015.multiply(b).exp().multiply(a).add(c).toUint8();
 var height_2015 = height_2015_.updateMask(height_2015_.gt(2));
 var height_recover2015_ratio = height_2015.float().divide(forest_height2000.float()).multiply(100).toUint8().updateMask(height_2015.mask());
-var AGB_2015_=  height_2015.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();//乘了10倍，加0.1为了避免出现0值
+var AGB_2015_=  height_2015.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();
 var AGB_2015 = AGB_2015_.updateMask(AGB_2015_.gt(0));
 var AGB_recover2015_ratio = AGB_2015.float().divide(AGB_2000_reference.float()).multiply(100).toUint8().updateMask(AGB_2015.mask());
 //2010
 var height_2010_ = frt2010.multiply(b).exp().multiply(a).add(c).toUint8();
 var height_2010 = height_2010_.updateMask(height_2010_.gt(2));
 var height_recover2010_ratio = height_2010.float().divide(forest_height2000.float()).multiply(100).toUint8().updateMask(height_2010.mask());
-var AGB_2010_=  height_2010.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();//乘了10倍，加0.1为了避免出现0值
+var AGB_2010_=  height_2010.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();
 var AGB_2010 = AGB_2010_.updateMask(AGB_2010_.gt(0));
 var AGB_recover2010_ratio = AGB_2010.float().divide(AGB_2000_reference.float()).multiply(100).toUint8().updateMask(AGB_2010.mask());
 //2005
 var height_2005_ = frt2005.multiply(b).exp().multiply(a).add(c).toUint8();
 var height_2005 = height_2005_.updateMask(height_2005_.gt(2));
 var height_recover2005_ratio = height_2005.float().divide(forest_height2000.float()).multiply(100).toUint8().updateMask(height_2005.mask());
-var AGB_2005_=  height_2005.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();//乘了10倍，加0.1为了避免出现0值
+var AGB_2005_=  height_2005.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();
 var AGB_2005 = AGB_2005_.updateMask(AGB_2005_.gt(0));
 var AGB_recover2005_ratio = AGB_2005.float().divide(AGB_2000_reference.float()).multiply(100).toUint8().updateMask(AGB_2005.mask());
-//制图恢复速率（高度和生物量）放大了10倍
-//高度公式求导后f(x) = 1.5395*e^(-0.1469t)   // -10.48e^(-0.1469t)+13.01
-//生物量与恢复时间公式f(x) =  0.0251(-10.48e^(-0.1469t)+13.01)^2.12
-//上式求导后= 0.0251*1.5395*2.12*(-10.48e^(-0.1469t)+13.01)^1.12*e^(-0.1469t) = 0.0819(-10.48e^(-0.1469t)+13.01)^1.12*e^(-0.1469t)
+
+//map forest height and AGB regowth rate
 //2020
 var height_recover_rate2020 = forest_recover_time.multiply(b).exp().multiply(a).multiply(b).add(0.1).multiply(10).toUint8();
 var AGB_recover_rate2020 = forest_recover_time.multiply(b).exp().multiply(d).multiply(a).multiply(b).multiply(e).multiply
@@ -795,15 +705,8 @@ var AGB_recover_rate2010 = frt2010.multiply(b).exp().multiply(d).multiply(a).mul
 var height_recover_rate2005 = frt2005.multiply(b).exp().multiply(a).multiply(b).add(0.1).multiply(10).toUint8();
 var AGB_recover_rate2005 = frt2005.multiply(b).exp().multiply(d).multiply(a).multiply(b).multiply(e).multiply
       (frt2005.multiply(b).exp().multiply(a).add(c).pow(e - 1)).add(0.1).multiply(10).toUint8();
-//生成随机点验证2020高度
-//var points_Africa1 = ee.FeatureCollection.randomPoints(Africa, 300000);
-//var height_my = height_2020_my.reduceRegions({collection: points_Africa1,reducer: ee.Reducer.mean(),scale: 30});
-//var height_his = height_2020.reduceRegions({collection: points_Africa1,reducer: ee.Reducer.mean(),scale: 30});
-//导出my和his高度
-//Export.table.toDrive({collection:height_my,folder:"Fire_height_validation2020",description: "Africa_height_my",});
-//Export.table.toDrive({collection:height_his,folder:"Fire_height_validation2020",description: "Africa_height_his"});
 
-//导出
+//add bands
 var height_regrowth = recover_type2020.addBands([
                     height_recover2020_ratio, height_recover2015_ratio, height_recover2010_ratio, height_recover2005_ratio,
                     height_recover_rate2020, height_recover_rate2015, height_recover_rate2010, height_recover_rate2005,]).rename([
@@ -816,15 +719,10 @@ var AGB_regrowth = recover_type2020.addBands([
                     'Regrowth_type_2020',
                     'AGB_regrowth_ratio_2020', 'AGB_regrowth_ratio_2015', 'AGB_regrowth_ratio_2010', 'AGB_regrowth_ratio_2005',
                     'AGB_regrowth_rate_2020', 'AGB_regrowth_rate_2015', 'AGB_regrowth_rate_2010', 'AGB_regrowth_rate_2005',]);
-// 导出影像
-//Export.image.toDrive({image: height_regrowth,description: 'Africa_height_regrowth500',folder: 'Africa_regrowth_fire',region: Africa,scale: 500,crs: 'EPSG:4326', maxPixels: 1e13,});
-//Export.image.toDrive({image: AGB_regrowth, description: 'Africa_AGB_regrowth500',folder: 'Africa_regrowth_fire',region: Africa,scale: 500,crs: 'EPSG:4326', maxPixels: 1e13,});  
-//Export.image.toDrive({image: LAI_regrowth,description: 'Africa_LAI_regrowth500',folder: 'Africa_regrowth_fire',region: Africa,scale: 500,crs: 'EPSG:4326', maxPixels: 1e13,});
-//Export.image.toDrive({image: FPAR_regrowth,description: 'Africa_FPAR_regrowth500',folder: 'Africa_regrowth_fire',region: Africa,scale: 500,crs: 'EPSG:4326', maxPixels: 1e13,}); 
 
-// 导出影像30,排除-30_10,-30_20,-10_40,0_30,0_40,
-var lonMin = 10; var lonMax = 50;  // 起始经度 // 终止经度
-var latMin = -30; var latMax = 10;  // 起始纬度 // 终止纬度
+//export area1
+var lonMin = 10; var lonMax = 50; 
+var latMin = -30; var latMax = 10; 
 for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < latMax; lat += 10) {
     var blockGeometry = ee.Geometry.Rectangle([lon, lat, lon + 10, lat + 10]);
     var clipped_height_regrowth = height_regrowth.clip(blockGeometry);
@@ -841,9 +739,9 @@ for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < la
     var export4 = {image: clipped_FPAR_regrowth,description: 'Africa_FPAR_regrowth_' + direction,
     folder: 'Africa_FPAR_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export4);}}
 
-// 导出影像30
-var lonMin = -20; var lonMax = 10;  // 起始经度 // 终止经度
-var latMin = 0; var latMax = 10;  // 起始纬度 // 终止纬度
+//export area2
+var lonMin = -20; var lonMax = 10;  
+var latMin = 0; var latMax = 10; 
 for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < latMax; lat += 10) {
     var blockGeometry = ee.Geometry.Rectangle([lon, lat, lon + 10, lat + 10]);
     var clipped_height_regrowth = height_regrowth.clip(blockGeometry);
@@ -860,29 +758,25 @@ for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < la
     var export4 = {image: clipped_FPAR_regrowth,description: 'Africa_FPAR_regrowth_' + direction,
     folder: 'Africa_FPAR_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export4);}}
 
-//North_America
-//var points_North_America = ee.FeatureCollection.randomPoints(North_America, 150000);
-//var height_Values_North_America = canada_USA_height_2020.reduceRegions({collection: points_North_America,reducer: ee.Reducer.mean(),scale: 30,});
-//var recovertime_Values_North_America = canada_USA_forest_recover_time.reduceRegions({collection: points_North_America,reducer: ee.Reducer.mean(),scale: 30,});
-//导出建立恢复时间高度关系公式
-//Export.table.toDrive({collection:height_Values_North_America,folder:"Fire_random",description: "North_America_height",fileNamePrefix: "North_America_height",});
-//Export.table.toDrive({collection:recovertime_Values_North_America,folder:"Fire_random",description: "North_America_recovertime",fileNamePrefix: "North_America_recovertime",});
-////原始林高度计算
-//var lossyear2019 = lossyear.updateMask(lossyear.lt(20));
-//var virgin_forest_height= forest_height2020.updateMask(forest_2020.updateMask(canada_USA_recover_type2020.mask().not()).updateMask(lossyear2019.mask().not()).updateMask(recover_type2020.mask().not()));
-//var virgin_forest_statistics = virgin_forest_height.reduceRegion({reducer: ee.Reducer.mean().combine(ee.Reducer.stdDev(), '', true),geometry: North_America.geometry(),scale: 100,maxPixels: 1e13});
-//var meanValue = ee.FeatureCollection([ee.Feature(null, {'meanValue': virgin_forest_statistics.get('b1_mean')})]);
-//Export.table.toDrive({collection: meanValue,description: 'meanValue', folder: 'North_America_virginForestHeight',fileFormat: 'CSV'});
-//print('标准差:', virgin_forest_statistics.get('b1_stdDev'));
-//**参数设置**
+//****North_America****
+//calculate virgin forest height
+var gfc2022 = ee.Image('UMD/hansen/global_forest_change_2022_v1_10');
+var lossyear = gfc2022.select(['lossyear']);
+var lossyear2019 = lossyear.updateMask(lossyear.lt(20));
+var virgin_forest_height= forest_height2020.updateMask(forest_2020.updateMask(canada_USA_recover_type2020.mask().not()).updateMask(lossyear2019.mask().not()).updateMask(recover_type2020.mask().not()));
+var virgin_forest_statistics = virgin_forest_height.reduceRegion({reducer: ee.Reducer.mean().combine(ee.Reducer.stdDev(), '', true),geometry: North_America.geometry(),scale: 30,maxPixels: 1e13});
+var meanValue = ee.FeatureCollection([ee.Feature(null, {'meanValue': virgin_forest_statistics.get('b1_mean')})]);
+Export.table.toDrive({collection: meanValue,description: 'meanValue', folder: 'North_America_virginForestHeight',fileFormat: 'CSV'});
+
+//map forest height and AGB regowth ratio
 var a = -10.7; var b = -0.0885; var c = 14.23; var d = 0.1372; var e = 1.5512;
-var height_1983_reference = 10;//100m时，9.90
+var height_1983_reference = 10;
 var AGB_1983_reference = ee.Number(10).pow(e).multiply(d).multiply(10);//mean=9.64, SD=6.94
 //2020
 var height_2020_my_ = canada_USA_forest_recover_time.multiply(b).exp().multiply(a).add(c).toUint8();
 var height_2020_my = height_2020_my_.updateMask(height_2020_my_.gt(2));
 var height_recover2020_ratio = canada_USA_height_2020.float().divide(height_1983_reference).multiply(100).toUint8().updateMask(canada_USA_height_2020.mask());
-var AGB_2020_=  canada_USA_height_2020.pow(e).multiply(d).add(0.1).multiply(10).toUint8();//乘了10倍，加0.1为了避免出现0值
+var AGB_2020_=  canada_USA_height_2020.pow(e).multiply(d).add(0.1).multiply(10).toUint8();
 var AGB_2020 = AGB_2020_.updateMask(AGB_2020_.gt(0));
 var AGB_recover2020_ratio = AGB_2020.float().divide(AGB_1983_reference.float()).multiply(100).toUint8().updateMask(AGB_2020.mask());
 //2015
@@ -891,7 +785,7 @@ var frt2015 =  forest_recover_time2015.updateMask(forest_recover_time2015.gt(0))
 var height_2015_ = frt2015.multiply(b).exp().multiply(a).add(c).toUint8();
 var height_2015 = height_2015_.updateMask(height_2015_.gt(2));
 var height_recover2015_ratio = height_2015.float().divide(height_1983_reference).multiply(100).toUint8().updateMask(height_2015.mask());
-var AGB_2015_=  height_2015.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();//乘了10倍，加0.1为了避免出现0值
+var AGB_2015_=  height_2015.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();
 var AGB_2015 = AGB_2015_.updateMask(AGB_2015_.gt(0));
 var AGB_recover2015_ratio = AGB_2015.float().divide(AGB_1983_reference.float()).multiply(100).toUint8().updateMask(AGB_2015.mask());
 //2010
@@ -900,7 +794,7 @@ var frt2010 =  forest_recover_time2010.updateMask(forest_recover_time2010.gt(0))
 var height_2010_ = frt2010.multiply(b).exp().multiply(a).add(c).toUint8();
 var height_2010 = height_2010_.updateMask(height_2010_.gt(2));
 var height_recover2010_ratio = height_2010.float().divide(height_1983_reference).multiply(100).toUint8().updateMask(height_2010.mask());
-var AGB_2010_=  height_2010.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();//乘了10倍，加0.1为了避免出现0值
+var AGB_2010_=  height_2010.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();
 var AGB_2010 = AGB_2010_.updateMask(AGB_2010_.gt(0));
 var AGB_recover2010_ratio = AGB_2010.float().divide(AGB_1983_reference.float()).multiply(100).toUint8().updateMask(AGB_2010.mask());
 //2005
@@ -909,7 +803,7 @@ var frt2005 = forest_recover_time2005.updateMask(forest_recover_time2005.gt(0));
 var height_2005_ = frt2005.multiply(b).exp().multiply(a).add(c).toUint8();
 var height_2005 = height_2005_.updateMask(height_2005_.gt(2));
 var height_recover2005_ratio = height_2005.float().divide(height_1983_reference).multiply(100).toUint8().updateMask(height_2005.mask());
-var AGB_2005_=  height_2005.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();//乘了10倍，加0.1为了避免出现0值
+var AGB_2005_=  height_2005.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();
 var AGB_2005 = AGB_2005_.updateMask(AGB_2005_.gt(0));
 var AGB_recover2005_ratio = AGB_2005.float().divide(AGB_1983_reference.float()).multiply(100).toUint8().updateMask(AGB_2005.mask());
 //2000
@@ -918,7 +812,7 @@ var frt2000 = forest_recover_time2000.updateMask(forest_recover_time2000.gt(0));
 var height_2000_ = frt2000.multiply(b).exp().multiply(a).add(c).toUint8();
 var height_2000 = height_2000_.updateMask(height_2000_.gt(2));
 var height_recover2000_ratio = height_2000.float().divide(height_1983_reference).multiply(100).toUint8().updateMask(height_2000.mask());
-var AGB_2000_=  height_2000.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();//乘了10倍，加0.1为了避免出现0值
+var AGB_2000_=  height_2000.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();
 var AGB_2000 = AGB_2000_.updateMask(AGB_2000_.gt(0));
 var AGB_recover2000_ratio = AGB_2000.float().divide(AGB_1983_reference.float()).multiply(100).toUint8().updateMask(AGB_2000.mask());
 //1995
@@ -927,7 +821,7 @@ var frt1995 = forest_recover_time1995.updateMask(forest_recover_time1995.gt(0));
 var height_1995_ = frt1995.multiply(b).exp().multiply(a).add(c).toUint8();
 var height_1995 = height_1995_.updateMask(height_1995_.gt(2));
 var height_recover1995_ratio = height_1995.float().divide(height_1983_reference).multiply(100).toUint8().updateMask(height_1995.mask());
-var AGB_1995_=  height_1995.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();//乘了10倍，加0.1为了避免出现0值
+var AGB_1995_=  height_1995.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();
 var AGB_1995 = AGB_1995_.updateMask(AGB_1995_.gt(0));
 var AGB_recover1995_ratio = AGB_1995.float().divide(AGB_1983_reference.float()).multiply(100).toUint8().updateMask(AGB_1995.mask());
 //1990
@@ -936,13 +830,11 @@ var frt1990 = forest_recover_time1990.updateMask(forest_recover_time1990.gt(0));
 var height_1990_ = frt1990.multiply(b).exp().multiply(a).add(c).toUint8();
 var height_1990 = height_1990_.updateMask(height_1990_.gt(2));
 var height_recover1990_ratio = height_1990.float().divide(height_1983_reference).multiply(100).toUint8().updateMask(height_1990.mask());
-var AGB_1990_=  height_1990.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();//乘了10倍，加0.1为了避免出现0值
+var AGB_1990_=  height_1990.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();
 var AGB_1990 = AGB_1990_.updateMask(AGB_1990_.gt(0));
 var AGB_recover1990_ratio = AGB_1990.float().divide(AGB_1983_reference.float()).multiply(100).toUint8().updateMask(AGB_1990.mask());
-//制图恢复速率（高度和生物量）放大了10倍
-//高度公式求导后f(x) = 0.9470*e^(-0.0885t)   // -10.70e^(-0.0885t)+14.23
-//生物量与恢复时间公式f(x) =  0.1372(-10.70e^(-0.0885t)+14.23)^1.5512
-//上式求导后= 0.1372*0.9470*1.2103*(-10.70e^(-0.0885t)+14.23)^0.5512*e^(-0.0885t) = 0.1573(-10.70e^(-0.0885t)+14.23)^0.5512*e^(-0.0885t)
+
+//map forest height and AGB regowth rate
 //2020
 var height_recover_rate2020 = canada_USA_forest_recover_time.multiply(b).exp().multiply(a).multiply(b).add(0.1).multiply(10).toUint8();
 var AGB_recover_rate2020 = canada_USA_forest_recover_time.multiply(b).exp().multiply(d).multiply(a).multiply(b).multiply(e).multiply
@@ -971,8 +863,8 @@ var AGB_recover_rate1995 = frt1995.multiply(b).exp().multiply(d).multiply(a).mul
 var height_recover_rate1990 = frt1990.multiply(b).exp().multiply(a).multiply(b).add(0.1).multiply(10).toUint8();
 var AGB_recover_rate1990 = frt1990.multiply(b).exp().multiply(d).multiply(a).multiply(b).multiply(e).multiply
       (frt1990.multiply(b).exp().multiply(a).add(c).pow(e - 1)).add(0.1).multiply(10).toUint8();
-//**制图LAI与FPAR恢复量、恢复程度**
 
+//map forest LAI and FPAR regowth ratio
 //2020
 var LAI_recover2020 = LAI250m_2020.updateMask(canada_USA_forest_recover_time.mask()).toUint8();
 var FPAR_recover2020 = FPAR250m_2020.updateMask(canada_USA_forest_recover_time.mask()).toUint8();
@@ -1009,7 +901,7 @@ var FPAR_recover1990 = FPAR5km_1990.updateMask(frt1990.mask()).toUint8();
 var LAI_recover1990_ratio = LAI_recover1990.float().divide(LAI5km_1985.float()).multiply(100).toUint8().updateMask(LAI_recover1990.mask());
 var FPAR_recover1990_ratio = FPAR_recover1990.float().divide(FPAR5km_1985.float()).multiply(100).toUint8().updateMask(FPAR_recover1990.mask());
 
-////制图恢复速率，LAI本身乘以10倍，速率又乘以10倍。LAI最后结果乘以 0.01才是真实值
+//map forest LAI and FPAR regowth rate
 var LAI_recover2021 = LAI250m_2021.updateMask(canada_USA_forest_recover_time.mask()).toUint8();
 var LAI_recover2019 = LAI250m_2019.updateMask(canada_USA_forest_recover_time.mask()).toUint8();
 var LAI_recover2016 = LAI250m_2016.updateMask(frt2015.mask()).toUint8();
@@ -1073,15 +965,8 @@ var LAI_recover_rate1990_ = (LAI_recover1991.subtract(LAI_recover1989)).divide(2
 var LAI_recover_rate1990 = LAI_recover_rate1990_.where(LAI_recover_rate1990_.lt(0.1),0.1).multiply(10).toUint8();
 var FPAR_recover_rate1990_ = (FPAR_recover1991.subtract(FPAR_recover1989)).divide(2);
 var FPAR_recover_rate1990 = FPAR_recover_rate1990_.where(FPAR_recover_rate1990_.lt(0.1),0.1).multiply(10).toUint8();
-//生成随机点验证2020高度
-//var points_North_America1 = ee.FeatureCollection.randomPoints(North_America, 70000);
-//var height_my = height_2020_my.reduceRegions({collection: points_North_America1,reducer: ee.Reducer.mean(),scale: 30});
-//var height_his = canada_USA_height_2020.reduceRegions({collection: points_North_America1,reducer: ee.Reducer.mean(),scale: 30});
-//导出my和his高度
-//Export.table.toDrive({collection:height_my,folder:"Fire_height_validation2020",description: "North_America_height_my",});
-//Export.table.toDrive({collection:height_his,folder:"Fire_height_validation2020",description: "North_America_height_his"});
 
-//导出
+//add bands
 var height_regrowth = canada_USA_recover_type2020.addBands([
                     height_recover2020_ratio, height_recover2015_ratio, height_recover2010_ratio, height_recover2005_ratio,
                     height_recover2000_ratio, height_recover1995_ratio, height_recover1990_ratio,
@@ -1122,15 +1007,10 @@ var FPAR_regrowth = canada_USA_recover_type2020.addBands([
                     'FPAR_regrowth_ratio_2000', 'FPAR_regrowth_ratio_1995', 'FPAR_regrowth_ratio_1990',
                     'FPAR_regrowth_rate_2020', 'FPAR_regrowth_rate_2015', 'FPAR_regrowth_rate_2010', 'FPAR_regrowth_rate_2005',
                     'FPAR_regrowth_rate_2000', 'FPAR_regrowth_rate_1995', 'FPAR_regrowth_rate_1990']);        
-// 导出影像
-//Export.image.toDrive({image: height_regrowth,description: 'North_America_height_regrowth500',folder: 'North_America_regrowth_fire',region: North_America,scale: 500,crs: 'EPSG:4326', maxPixels: 1e13,});
-//Export.image.toDrive({image: AGB_regrowth, description: 'North_America_AGB_regrowth500',folder: 'North_America_regrowth_fire',region: North_America,scale: 500,crs: 'EPSG:4326', maxPixels: 1e13,});  
-//Export.image.toDrive({image: LAI_regrowth,description: 'North_America_LAI_regrowth500',folder: 'North_America_regrowth_fire',region: North_America,scale: 500,crs: 'EPSG:4326', maxPixels: 1e13,});
-//Export.image.toDrive({image: FPAR_regrowth,description: 'North_America_FPAR_regrowth500',folder: 'North_America_regrowth_fire',region: North_America,scale: 500,crs: 'EPSG:4326', maxPixels: 1e13,}); 
 
-// 导出影像30,排除30_-80,30_-70
-var lonMin = -130; var lonMax = -60;  // 起始经度 // 终止经度
-var latMin = 30; var latMax = 60;  // 起始纬度 // 终止纬度
+//export area1
+var lonMin = -130; var lonMax = -60; 
+var latMin = 30; var latMax = 60; 
 for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < latMax; lat += 10) {
     var blockGeometry = ee.Geometry.Rectangle([lon, lat, lon + 10, lat + 10]);
     var clipped_height_regrowth = height_regrowth.clip(blockGeometry);
@@ -1147,9 +1027,9 @@ for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < la
     var export4 = {image: clipped_FPAR_regrowth,description: 'North_America_FPAR_regrowth_' + direction,
     folder: 'North_America_FPAR_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export4);}}
 
-// 导出影像30
-var lonMin = -160; var lonMax = -130;  // 起始经度 // 终止经度
-var latMin = 60; var latMax = 70;  // 起始纬度 // 终止纬度
+//export area2
+var lonMin = -160; var lonMax = -130;  
+var latMin = 60; var latMax = 70; 
 for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < latMax; lat += 10) {
     var blockGeometry = ee.Geometry.Rectangle([lon, lat, lon + 10, lat + 10]);
     var clipped_height_regrowth = height_regrowth.clip(blockGeometry);
