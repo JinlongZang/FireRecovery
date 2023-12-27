@@ -9,5 +9,5 @@ We employed multiple remotely sensed datasets to generate the first global maps 
 ## Regrowth ratio of forest height, AGB, LAI, and FPAR in 2020 following wildfires
 <img width="1000" alt="Regrowth_ratio_" src="https://github.com/JinlongZang/FireRecovery/assets/154531389/d7d05eaa-c363-4383-8f5a-9e958a41cd22">
 
-## Regrowth ratio of forest height, AGB, LAI, and FPAR in 2020 following wildfires
+## Regrowth rate of forest height, AGB, LAI, and FPAR in 2020 following wildfires
 <img width="1000" alt="Regrowth_rate_" src="https://github.com/JinlongZang/FireRecovery/assets/154531389/c8fdbae1-c796-410a-a75b-7de0424188d7">
