@@ -1,36 +1,36 @@
 //upload and import global GLASS LAI median mosaics (250m, 2000-2021)
 //import global AVHRR LAI and FPAR medians before 2000 (AVHRR LAI and FPAR: 1981-06-24–2013-12-31,scale = 0.001,5km)
-var LAI5km_1995 = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
+var LAI5km_1995_ = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
                   .filter(ee.Filter.date('1995-01-01', '1995-12-31')).select('LAI').median().multiply(0.01);
-var LAI5km_1990 = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
+var LAI5km_1990_ = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
                   .filter(ee.Filter.date('1990-01-01', '1990-12-31')).select('LAI').median().multiply(0.01);
-var LAI5km_1985 = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
+var LAI5km_1985_ = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
                   .filter(ee.Filter.date('1985-01-01', '1985-12-31')).select('LAI').median().multiply(0.01);
-var LAI5km_1989 = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
+var LAI5km_1989_ = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
                   .filter(ee.Filter.date('1989-01-01', '1989-12-31')).select('LAI').median().multiply(0.01);
-var LAI5km_1991 = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
+var LAI5km_1991_ = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
                   .filter(ee.Filter.date('1991-01-01', '1991-12-31')).select('LAI').median().multiply(0.01);
-var LAI5km_1994 = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
+var LAI5km_1994_ = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
                   .filter(ee.Filter.date('1994-01-01', '1994-12-31')).select('LAI').median().multiply(0.01);                  
-var LAI5km_1996 = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
+var LAI5km_1996_ = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
                   .filter(ee.Filter.date('1996-01-01', '1996-12-31')).select('LAI').median().multiply(0.01);                      
-var LAI5km_1999 = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
+var LAI5km_1999_ = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
                   .filter(ee.Filter.date('1999-01-01', '1999-12-31')).select('LAI').median().multiply(0.01);    
-var FPAR5km_1995 = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
+var FPAR5km_1995_ = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
                   .filter(ee.Filter.date('1995-01-01', '1995-12-31')).select('FAPAR').median().multiply(0.25);
-var FPAR5km_1990 = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
+var FPAR5km_1990_ = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
                   .filter(ee.Filter.date('1990-01-01', '1990-12-31')).select('FAPAR').median().multiply(0.25);
-var FPAR5km_1985 = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
+var FPAR5km_1985_ = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
                   .filter(ee.Filter.date('1985-01-01', '1985-12-31')).select('FAPAR').median().multiply(0.25);
-var FPAR5km_1989 = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
+var FPAR5km_1989_ = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
                   .filter(ee.Filter.date('1989-01-01', '1989-12-31')).select('FAPAR').median().multiply(0.25);
-var FPAR5km_1991 = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
+var FPAR5km_1991_ = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
                   .filter(ee.Filter.date('1991-01-01', '1991-12-31')).select('FAPAR').median().multiply(0.25);
-var FPAR5km_1994 = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
+var FPAR5km_1994_ = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
                   .filter(ee.Filter.date('1994-01-01', '1994-12-31')).select('FAPAR').median().multiply(0.25);
-var FPAR5km_1996 = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
+var FPAR5km_1996_ = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
                   .filter(ee.Filter.date('1996-01-01', '1996-12-31')).select('FAPAR').median().multiply(0.25);
-var FPAR5km_1999 = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
+var FPAR5km_1999_ = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
                   .filter(ee.Filter.date('1999-01-01', '1999-12-31')).select('FAPAR').median().multiply(0.25);
 var resample = function(image) {var resampledImage = image.resample('bilinear').reproject({crs: 'EPSG:4326',scale: 30});return resampledImage;};
 var LAI250m_2000 = resample(LAI250m_2000_);var LAI250m_2001 = resample(LAI250m_2001_);var LAI250m_2004 = resample(LAI250m_2004_);
