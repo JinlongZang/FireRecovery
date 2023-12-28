@@ -35,12 +35,14 @@ var FPAR5km_1999_ = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
 var resample = function(image) {var resampledImage = image.resample('bilinear').reproject({crs: 'EPSG:4326',scale: 30});return resampledImage;};
 var LAI250m_2000 = resample(LAI250m_2000_);var LAI250m_2001 = resample(LAI250m_2001_);var LAI250m_2004 = resample(LAI250m_2004_);
 var LAI250m_2005 = resample(LAI250m_2005_);var LAI250m_2006 = resample(LAI250m_2006_);var LAI250m_2009 = resample(LAI250m_2009_);
-var LAI250m_2010 = resample(LAI250m_2010_);var LAI250m_2011 = resample(LAI250m_2011_);var LAI250m_2015 = resample(LAI250m_2015_);
+var LAI250m_2010 = resample(LAI250m_2010_);var LAI250m_2011 = resample(LAI250m_2011_);var LAI250m_2014 = resample(LAI250m_2014_);
+var LAI250m_2015 = resample(LAI250m_2015_);
 var LAI250m_2016 = resample(LAI250m_2016_);var LAI250m_2019 = resample(LAI250m_2019_);var LAI250m_2020 = resample(LAI250m_2020_);
 var LAI250m_2021 = resample(LAI250m_2021_);
 var FPAR250m_2000 = resample(FPAR250m_2000_);var FPAR250m_2001 = resample(FPAR250m_2001_);var FPAR250m_2004 = resample(FPAR250m_2004_);
 var FPAR250m_2005 = resample(FPAR250m_2005_);var FPAR250m_2006 = resample(FPAR250m_2006_);var FPAR250m_2009 = resample(FPAR250m_2009_);
-var FPAR250m_2010 = resample(FPAR250m_2010_);var FPAR250m_2011 = resample(FPAR250m_2011_);var FPAR250m_2015 = resample(FPAR250m_2015_);
+var FPAR250m_2010 = resample(FPAR250m_2010_);var FPAR250m_2011 = resample(FPAR250m_2011_);var FPAR250m_2014 = resample(FPAR250m_2014_);
+var FPAR250m_2015 = resample(FPAR250m_2015_);
 var FPAR250m_2016 = resample(FPAR250m_2016_);var FPAR250m_2019 = resample(FPAR250m_2019_);var FPAR250m_2020 = resample(FPAR250m_2020_);
 var FPAR250m_2021 = resample(FPAR250m_2021_);
 var LAI5km_1985 = resample(LAI5km_1985_);var LAI5km_1989 = resample(LAI5km_1989_);
