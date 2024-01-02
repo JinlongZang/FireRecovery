@@ -6,6 +6,8 @@ var LAI5km_1990_ = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
                   .filter(ee.Filter.date('1990-01-01', '1990-12-31')).select('LAI').median().multiply(0.01);
 var LAI5km_1985_ = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
                   .filter(ee.Filter.date('1985-01-01', '1985-12-31')).select('LAI').median().multiply(0.01);
+var LAI5km_1982_ = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
+                  .filter(ee.Filter.date('1982-01-01', '1982-12-31')).select('LAI').median().multiply(0.01);
 var LAI5km_1989_ = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
                   .filter(ee.Filter.date('1989-01-01', '1989-12-31')).select('LAI').median().multiply(0.01);
 var LAI5km_1991_ = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
@@ -22,6 +24,8 @@ var FPAR5km_1990_ = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
                   .filter(ee.Filter.date('1990-01-01', '1990-12-31')).select('FAPAR').median().multiply(0.25);
 var FPAR5km_1985_ = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
                   .filter(ee.Filter.date('1985-01-01', '1985-12-31')).select('FAPAR').median().multiply(0.25);
+var FPAR5km_1982_ = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
+                  .filter(ee.Filter.date('1982-01-01', '1982-12-31')).select('FAPAR').median().multiply(0.25);
 var FPAR5km_1989_ = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
                   .filter(ee.Filter.date('1989-01-01', '1989-12-31')).select('FAPAR').median().multiply(0.25);
 var FPAR5km_1991_ = ee.ImageCollection('NOAA/CDR/AVHRR/LAI_FAPAR/V5')
@@ -45,10 +49,10 @@ var FPAR250m_2010 = resample(FPAR250m_2010_);var FPAR250m_2011 = resample(FPAR25
 var FPAR250m_2015 = resample(FPAR250m_2015_);
 var FPAR250m_2016 = resample(FPAR250m_2016_);var FPAR250m_2019 = resample(FPAR250m_2019_);var FPAR250m_2020 = resample(FPAR250m_2020_);
 var FPAR250m_2021 = resample(FPAR250m_2021_);
-var LAI5km_1985 = resample(LAI5km_1985_);var LAI5km_1989 = resample(LAI5km_1989_);
+var LAI5km_1982 = resample(LAI5km_1982_);var LAI5km_1985 = resample(LAI5km_1985_);var LAI5km_1989 = resample(LAI5km_1989_);
 var LAI5km_1990 = resample(LAI5km_1990_);var LAI5km_1991 = resample(LAI5km_1991_);var LAI5km_1994 = resample(LAI5km_1994_);
 var LAI5km_1995 = resample(LAI5km_1995_);var LAI5km_1996 = resample(LAI5km_1996_);var LAI5km_1999 = resample(LAI5km_1999_);
-var FPAR5km_1985 = resample(FPAR5km_1985_);var FPAR5km_1989 = resample(FPAR5km_1989_);
+var FPAR5km_1982 = resample(FPAR5km_1982_);var FPAR5km_1985 = resample(FPAR5km_1985_);var FPAR5km_1989 = resample(FPAR5km_1989_);
 var FPAR5km_1990 = resample(FPAR5km_1990_);var FPAR5km_1991 = resample(FPAR5km_1991_);var FPAR5km_1994 = resample(FPAR5km_1994_);
 var FPAR5km_1995 = resample(FPAR5km_1995_);var FPAR5km_1996 = resample(FPAR5km_1996_);var FPAR5km_1999 = resample(FPAR5km_1999_);
 
@@ -870,38 +874,38 @@ var AGB_recover_rate1990 = frt1990.multiply(b).exp().multiply(d).multiply(a).mul
 //2020
 var LAI_recover2020 = LAI250m_2020.updateMask(canada_USA_forest_recover_time.mask()).toUint8();
 var FPAR_recover2020 = FPAR250m_2020.updateMask(canada_USA_forest_recover_time.mask()).toUint8();
-var LAI_recover2020_ratio = LAI_recover2020.float().divide(LAI5km_1985.float()).multiply(100).toUint8().updateMask(LAI_recover2020.mask());
-var FPAR_recover2020_ratio = FPAR_recover2020.float().divide(FPAR5km_1985.float()).multiply(100).toUint8().updateMask(FPAR_recover2020.mask());
+var LAI_recover2020_ratio = LAI_recover2020.float().divide(LAI5km_1982.float()).multiply(100).toUint8().updateMask(LAI_recover2020.mask());
+var FPAR_recover2020_ratio = FPAR_recover2020.float().divide(FPAR5km_1982.float()).multiply(100).toUint8().updateMask(FPAR_recover2020.mask());
 //2015
 var LAI_recover2015 = LAI250m_2015.updateMask(frt2015.mask()).toUint8();
 var FPAR_recover2015 = FPAR250m_2015.updateMask(frt2015.mask()).toUint8();
-var LAI_recover2015_ratio = LAI_recover2015.float().divide(LAI5km_1985.float()).multiply(100).toUint8().updateMask(LAI_recover2015.mask());
-var FPAR_recover2015_ratio = FPAR_recover2015.float().divide(FPAR5km_1985.float()).multiply(100).toUint8().updateMask(FPAR_recover2015.mask());
+var LAI_recover2015_ratio = LAI_recover2015.float().divide(LAI5km_1982.float()).multiply(100).toUint8().updateMask(LAI_recover2015.mask());
+var FPAR_recover2015_ratio = FPAR_recover2015.float().divide(FPAR5km_1982.float()).multiply(100).toUint8().updateMask(FPAR_recover2015.mask());
 //2010
 var LAI_recover2010 = LAI250m_2010.updateMask(frt2010.mask()).toUint8();
 var FPAR_recover2010 = FPAR250m_2010.updateMask(frt2010.mask()).toUint8();
-var LAI_recover2010_ratio = LAI_recover2010.float().divide(LAI5km_1985.float()).multiply(100).toUint8().updateMask(LAI_recover2010.mask());
-var FPAR_recover2010_ratio = FPAR_recover2010.float().divide(FPAR5km_1985.float()).multiply(100).toUint8().updateMask(FPAR_recover2010.mask());
+var LAI_recover2010_ratio = LAI_recover2010.float().divide(LAI5km_1982.float()).multiply(100).toUint8().updateMask(LAI_recover2010.mask());
+var FPAR_recover2010_ratio = FPAR_recover2010.float().divide(FPAR5km_1982.float()).multiply(100).toUint8().updateMask(FPAR_recover2010.mask());
 //2005
 var LAI_recover2005 = LAI250m_2005.updateMask(frt2005.mask()).toUint8();
 var FPAR_recover2005 = FPAR250m_2005.updateMask(frt2005.mask()).toUint8();
-var LAI_recover2005_ratio = LAI_recover2005.float().divide(LAI5km_1985.float()).multiply(100).toUint8().updateMask(LAI_recover2005.mask());
-var FPAR_recover2005_ratio = FPAR_recover2005.float().divide(FPAR5km_1985.float()).multiply(100).toUint8().updateMask(FPAR_recover2005.mask());
+var LAI_recover2005_ratio = LAI_recover2005.float().divide(LAI5km_1982.float()).multiply(100).toUint8().updateMask(LAI_recover2005.mask());
+var FPAR_recover2005_ratio = FPAR_recover2005.float().divide(FPAR5km_1982.float()).multiply(100).toUint8().updateMask(FPAR_recover2005.mask());
 //2000
 var LAI_recover2000 = LAI250m_2000.updateMask(frt2000.mask()).toUint8();
 var FPAR_recover2000 = FPAR250m_2000.updateMask(frt2000.mask()).toUint8();
-var LAI_recover2000_ratio = LAI_recover2000.float().divide(LAI5km_1985.float()).multiply(100).toUint8().updateMask(LAI_recover2000.mask());
-var FPAR_recover2000_ratio = FPAR_recover2000.float().divide(FPAR5km_1985.float()).multiply(100).toUint8().updateMask(FPAR_recover2000.mask());
+var LAI_recover2000_ratio = LAI_recover2000.float().divide(LAI5km_1982.float()).multiply(100).toUint8().updateMask(LAI_recover2000.mask());
+var FPAR_recover2000_ratio = FPAR_recover2000.float().divide(FPAR5km_1982.float()).multiply(100).toUint8().updateMask(FPAR_recover2000.mask());
 //1995
 var LAI_recover1995 = LAI5km_1995.updateMask(frt1995.mask()).toUint8();
 var FPAR_recover1995 = FPAR5km_1995.updateMask(frt1995.mask()).toUint8();
-var LAI_recover1995_ratio = LAI_recover1995.float().divide(LAI5km_1985.float()).multiply(100).toUint8().updateMask(LAI_recover1995.mask());
-var FPAR_recover1995_ratio = FPAR_recover1995.float().divide(FPAR5km_1985.float()).multiply(100).toUint8().updateMask(FPAR_recover1995.mask());
+var LAI_recover1995_ratio = LAI_recover1995.float().divide(LAI5km_1982.float()).multiply(100).toUint8().updateMask(LAI_recover1995.mask());
+var FPAR_recover1995_ratio = FPAR_recover1995.float().divide(FPAR5km_1982.float()).multiply(100).toUint8().updateMask(FPAR_recover1995.mask());
 //1990
 var LAI_recover1990 = LAI5km_1990.updateMask(frt1990.mask()).toUint8();
 var FPAR_recover1990 = FPAR5km_1990.updateMask(frt1990.mask()).toUint8();
-var LAI_recover1990_ratio = LAI_recover1990.float().divide(LAI5km_1985.float()).multiply(100).toUint8().updateMask(LAI_recover1990.mask());
-var FPAR_recover1990_ratio = FPAR_recover1990.float().divide(FPAR5km_1985.float()).multiply(100).toUint8().updateMask(FPAR_recover1990.mask());
+var LAI_recover1990_ratio = LAI_recover1990.float().divide(LAI5km_1982.float()).multiply(100).toUint8().updateMask(LAI_recover1990.mask());
+var FPAR_recover1990_ratio = FPAR_recover1990.float().divide(FPAR5km_1982.float()).multiply(100).toUint8().updateMask(FPAR_recover1990.mask());
 
 //map forest LAI and FPAR regowth rate
 var LAI_recover2021 = LAI250m_2021.updateMask(canada_USA_forest_recover_time.mask()).toUint8();
