@@ -74,7 +74,9 @@ var FNF3data = ee.ImageCollection("JAXA/ALOS/PALSAR/YEARLY/FNF")
                   .filterDate('2007-01-01', '2007-12-31')
                   .select('fnf');
 var FNF3_ = FNF3data.qualityMosaic('fnf');
-var FNF3 = resample(FNF3_);
+var FNF3_ = FNF3_.setDefaultProjection({crs: 'EPSG:4326',scale: 25});
+var FNF3 = FNF3_.reduceResolution({reducer: ee.Reducer.mean(), bestEffort: true, maxPixels: 4})
+                .reproject({crs: 'EPSG:4326',scale: 30});
 //1_forest; 2_Non Forest; 3_Water
 var forest_2007 = FNF3.updateMask(FNF3.eq(1));
 var forest_fire = loss_due_to_fire2019.updateMask(forest_2007.mask());
@@ -85,7 +87,9 @@ var FNF4 = ee.ImageCollection('JAXA/ALOS/PALSAR/YEARLY/FNF4')
                   .filterDate('2020-01-01', '2020-12-31')
                   .select('fnf');
 var FNF_ = FNF4.qualityMosaic('fnf');
-var FNF = resample(FNF_);
+var FNF_ = FNF_.setDefaultProjection({crs: 'EPSG:4326',scale: 25});
+var FNF = FNF_.reduceResolution({reducer: ee.Reducer.mean(), bestEffort: true, maxPixels: 4})
+                .reproject({crs: 'EPSG:4326',scale: 30});
 //1_Dense forest; 2_Non-dence Forest; 3_Non-forest; 4_Water; use forest_2007 to fill the loss scene in forest_2020
 var forest_2020_loss_scene = FNF.updateMask(FNF.lte(2));
 var loss_scene = forest_2007.clip(geometry2);
