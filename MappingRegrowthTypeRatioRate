@@ -132,7 +132,7 @@ var forest_height2000= ee.Image("projects/glad/GLCLU2020/Forest_height_2000").se
 var forest_height2020= ee.Image("projects/glad/GLCLU2020/Forest_height_2020").select("b1");
 var height_2020 = forest_height2020.updateMask(recover_type_forest.mask());
 var canada_USA_height_2020 = forest_height2020.updateMask(canada_USA_recover_type_forest.mask());
-var a = -24.34; var b = -0.0477; var c = 28.03; var d = 0.0194; var e = 2.1604;
+var a = -27.84; var b = -0.0340; var c = 30.75; var d = 0.0194; var e = 2.1604;
 var AGB_2000_reference= forest_height2000.updateMask(height_2020.mask()).pow(e).multiply(d).multiply(10);
 //2020
 var height_2020_my_ = forest_recover_time.multiply(b).exp().multiply(a).add(c).toUint8();
@@ -273,25 +273,6 @@ var FPAR_regrowth = recover_type2020.addBands([
                     'FPAR_regrowth_ratio_2020', 'FPAR_regrowth_ratio_2015', 'FPAR_regrowth_ratio_2010', 'FPAR_regrowth_ratio_2005',
                     'FPAR_regrowth_rate_2020', 'FPAR_regrowth_rate_2015', 'FPAR_regrowth_rate_2010', 'FPAR_regrowth_rate_2005']);        
 
-// export
-var lonMin = 90; var lonMax = 150; 
-var latMin = -10; var latMax = 20; 
-for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < latMax; lat += 10) {
-    var blockGeometry = ee.Geometry.Rectangle([lon, lat, lon + 10, lat + 10]);
-    var clipped_height_regrowth = height_regrowth.clip(blockGeometry);
-    var clipped_AGB_regrowth = AGB_regrowth.clip(blockGeometry);
-    var clipped_LAI_regrowth = LAI_regrowth.clip(blockGeometry);
-    var clipped_FPAR_regrowth = FPAR_regrowth.clip(blockGeometry);
-    var direction = '';if (lat >= 0) {direction += 'N' + lat ;} else {direction += 'S' + -lat;} if (lon >= 0) {direction += '_E'  + lon;} else {direction += '_W' + -lon ;}
-    var export1 = {image: clipped_height_regrowth,description: 'SE_Asia_Height_regrowth_' + direction,
-    folder: 'SE_Asia_Height_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export1);
-    var export2 = {image: clipped_AGB_regrowth,description: 'SE_Asia_AGB_regrowth_' + direction,
-    folder: 'SE_Asia_AGB_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export2);
-    var export3 = {image: clipped_LAI_regrowth,description: 'SE_Asia_LAI_regrowth_' + direction,
-    folder: 'SE_Asia_LAI_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export3);
-    var export4 = {image: clipped_FPAR_regrowth,description: 'SE_Asia_FPAR_regrowth_' + direction,
-    folder: 'SE_Asia_FPAR_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export4);}}
-
 //****Australia****
 //map forest height and AGB regowth ratio
 var a = -15.58; var b = -0.1498; var c = 18.01; var d = 0.0353; var e = 2.1506;
@@ -356,25 +337,6 @@ var AGB_regrowth = recover_type2020.addBands([
                     'Regrowth_type_2020',
                     'AGB_regrowth_ratio_2020', 'AGB_regrowth_ratio_2015', 'AGB_regrowth_ratio_2010', 'AGB_regrowth_ratio_2005',
                     'AGB_regrowth_rate_2020', 'AGB_regrowth_rate_2015', 'AGB_regrowth_rate_2010', 'AGB_regrowth_rate_2005',]);
-
-//export
-var lonMin = 110; var lonMax = 150;  
-var latMin = -50; var latMax = -10; 
-for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < latMax; lat += 10) {
-    var blockGeometry = ee.Geometry.Rectangle([lon, lat, lon + 10, lat + 10]);
-    var clipped_height_regrowth = height_regrowth.clip(blockGeometry);
-    var clipped_AGB_regrowth = AGB_regrowth.clip(blockGeometry);
-    var clipped_LAI_regrowth = LAI_regrowth.clip(blockGeometry);
-    var clipped_FPAR_regrowth = FPAR_regrowth.clip(blockGeometry);
-    var direction = '';if (lat >= 0) {direction += 'N' + lat ;} else {direction += 'S' + -lat;} if (lon >= 0) {direction += '_E'  + lon;} else {direction += '_W' + -lon ;}
-    var export1 = {image: clipped_height_regrowth,description: 'Australia_Height_regrowth_' + direction,
-    folder: 'Australia_Height_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export1);
-    var export2 = {image: clipped_AGB_regrowth,description: 'Australia_AGB_regrowth_' + direction,
-    folder: 'Australia_AGB_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export2);
-    var export3 = {image: clipped_LAI_regrowth,description: 'Australia_LAI_regrowth_' + direction,
-    folder: 'Australia_LAI_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export3);
-    var export4 = {image: clipped_FPAR_regrowth,description: 'Australia_FPAR_regrowth_' + direction,
-    folder: 'Australia_FPAR_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export4);}}
 
 //****Europe****
 //map forest height and AGB regowth ratio
@@ -441,28 +403,9 @@ var AGB_regrowth = recover_type2020.addBands([
                     'AGB_regrowth_ratio_2020', 'AGB_regrowth_ratio_2015', 'AGB_regrowth_ratio_2010', 'AGB_regrowth_ratio_2005',
                     'AGB_regrowth_rate_2020', 'AGB_regrowth_rate_2015', 'AGB_regrowth_rate_2010', 'AGB_regrowth_rate_2005',]);
 
-//export
-var lonMin = -10; var lonMax = 30; 
-var latMin = 30; var latMax = 70; 
-for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < latMax; lat += 10) {
-    var blockGeometry = ee.Geometry.Rectangle([lon, lat, lon + 10, lat + 10]);
-    var clipped_height_regrowth = height_regrowth.clip(blockGeometry);
-    var clipped_AGB_regrowth = AGB_regrowth.clip(blockGeometry);
-    var clipped_LAI_regrowth = LAI_regrowth.clip(blockGeometry);
-    var clipped_FPAR_regrowth = FPAR_regrowth.clip(blockGeometry);
-    var direction = '';if (lat >= 0) {direction += 'N' + lat ;} else {direction += 'S' + -lat;} if (lon >= 0) {direction += '_E'  + lon;} else {direction += '_W' + -lon ;}
-    var export1 = {image: clipped_height_regrowth,description: 'Europe_Height_regrowth_' + direction,
-    folder: 'Europe_Height_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export1);
-    var export2 = {image: clipped_AGB_regrowth,description: 'Europe_AGB_regrowth_' + direction,
-    folder: 'Europe_AGB_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export2);
-    var export3 = {image: clipped_LAI_regrowth,description: 'Europe_LAI_regrowth_' + direction,
-    folder: 'Europe_LAI_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export3);
-    var export4 = {image: clipped_FPAR_regrowth,description: 'Europe_FPAR_regrowth_' + direction,
-    folder: 'Europe_FPAR_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export4);}}
-
-//****Eurasia****
+//****North_Eurasia****
 //map forest height and AGB regowth ratio
-var a = -16.81; var b = -0.3045; var c = 13.36; var d = 0.018; var e = 2.2194;
+var a = -12.44; var b = -0.3095; var c = 13.35; var d = 0.018; var e = 2.2194;
 var AGB_2000_reference= forest_height2000.updateMask(height_2020.mask()).pow(e).multiply(d).multiply(10);
 //2020
 var height_2020_my_ = forest_recover_time.multiply(b).exp().multiply(a).add(c).toUint8();
@@ -524,47 +467,75 @@ var AGB_regrowth = recover_type2020.addBands([
                     'Regrowth_type_2020',
                     'AGB_regrowth_ratio_2020', 'AGB_regrowth_ratio_2015', 'AGB_regrowth_ratio_2010', 'AGB_regrowth_ratio_2005',
                     'AGB_regrowth_rate_2020', 'AGB_regrowth_rate_2015', 'AGB_regrowth_rate_2010', 'AGB_regrowth_rate_2005',]);
-//export area1
-var lonMin = 30; var lonMax = 170;  
-var latMin = 40; var latMax = 70; 
-for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < latMax; lat += 10) {
-    var blockGeometry = ee.Geometry.Rectangle([lon, lat, lon + 10, lat + 10]);
-    var clipped_height_regrowth = height_regrowth.clip(blockGeometry);
-    var clipped_AGB_regrowth = AGB_regrowth.clip(blockGeometry);
-    var clipped_LAI_regrowth = LAI_regrowth.clip(blockGeometry);
-    var clipped_FPAR_regrowth = FPAR_regrowth.clip(blockGeometry);
-    var direction = '';if (lat >= 0) {direction += 'N' + lat ;} else {direction += 'S' + -lat;} if (lon >= 0) {direction += '_E'  + lon;} else {direction += '_W' + -lon ;}
-    var export1 = {image: clipped_height_regrowth,description: 'Eurasia_east_Height_regrowth_' + direction,
-    folder: 'Eurasia_east_Height_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export1);
-    var export2 = {image: clipped_AGB_regrowth,description: 'Eurasia_east_AGB_regrowth_' + direction,
-    folder: 'Eurasia_east_AGB_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export2);
-    var export3 = {image: clipped_LAI_regrowth,description: 'Eurasia_east_LAI_regrowth_' + direction,
-    folder: 'Eurasia_east_LAI_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export3);
-    var export4 = {image: clipped_FPAR_regrowth,description: 'Eurasia_east_FPAR_regrowth_' + direction,
-    folder: 'Eurasia_east_FPAR_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export4);}}
 
-//export area2
-var lonMin = 80; var lonMax = 120; 
-var latMin = 20; var latMax = 40; 
-for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < latMax; lat += 10) {
-    var blockGeometry = ee.Geometry.Rectangle([lon, lat, lon + 10, lat + 10]);
-    var clipped_height_regrowth = height_regrowth.clip(blockGeometry);
-    var clipped_AGB_regrowth = AGB_regrowth.clip(blockGeometry);
-    var clipped_LAI_regrowth = LAI_regrowth.clip(blockGeometry);
-    var clipped_FPAR_regrowth = FPAR_regrowth.clip(blockGeometry);
-    var direction = '';if (lat >= 0) {direction += 'N' + lat ;} else {direction += 'S' + -lat;} if (lon >= 0) {direction += '_E'  + lon;} else {direction += '_W' + -lon ;}
-    var export1 = {image: clipped_height_regrowth,description: 'Eurasia_east_Height_regrowth_' + direction,
-    folder: 'Eurasia_east_Height_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export1);
-    var export2 = {image: clipped_AGB_regrowth,description: 'Eurasia_east_AGB_regrowth_' + direction,
-    folder: 'Eurasia_east_AGB_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export2);
-    var export3 = {image: clipped_LAI_regrowth,description: 'Eurasia_east_LAI_regrowth_' + direction,
-    folder: 'Eurasia_east_LAI_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export3);
-    var export4 = {image: clipped_FPAR_regrowth,description: 'Eurasia_east_FPAR_regrowth_' + direction,
-    folder: 'Eurasia_east_FPAR_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export4);}}
+//****South_Eurasia****
+//map forest height and AGB regowth ratio
+var a = -24.79; var b = -0.0345; var c = 29.30; var d = 0.246; var e = 1.4256;
+var AGB_2000_reference= forest_height2000.updateMask(height_2020.mask()).pow(e).multiply(d).multiply(10);
+//2020
+var height_2020_my_ = forest_recover_time.multiply(b).exp().multiply(a).add(c).toUint8();
+var height_2020_my = height_2020_my_.updateMask(height_2020_my_.gt(2));
+var height_recover2020_ratio = height_2020.float().divide(forest_height2000.float()).multiply(100).toUint8().updateMask(height_2020.mask());
+var AGB_2020_=  height_2020.pow(e).multiply(d).add(0.1).multiply(10).toUint8();
+var AGB_2020 = AGB_2020_.updateMask(AGB_2020_.gt(0));
+var AGB_recover2020_ratio = AGB_2020.float().divide(AGB_2000_reference.float()).multiply(100).toUint8().updateMask(AGB_2020.mask());
+//2015
+var height_2015_ = frt2015.multiply(b).exp().multiply(a).add(c).toUint8();
+var height_2015 = height_2015_.updateMask(height_2015_.gt(2));
+var height_recover2015_ratio = height_2015.float().divide(forest_height2000.float()).multiply(100).toUint8().updateMask(height_2015.mask());
+var AGB_2015_=  height_2015.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();
+var AGB_2015 = AGB_2015_.updateMask(AGB_2015_.gt(0));
+var AGB_recover2015_ratio = AGB_2015.float().divide(AGB_2000_reference.float()).multiply(100).toUint8().updateMask(AGB_2015.mask());
+//2010
+var height_2010_ = frt2010.multiply(b).exp().multiply(a).add(c).toUint8();
+var height_2010 = height_2010_.updateMask(height_2010_.gt(2));
+var height_recover2010_ratio = height_2010.float().divide(forest_height2000.float()).multiply(100).toUint8().updateMask(height_2010.mask());
+var AGB_2010_=  height_2010.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();
+var AGB_2010 = AGB_2010_.updateMask(AGB_2010_.gt(0));
+var AGB_recover2010_ratio = AGB_2010.float().divide(AGB_2000_reference.float()).multiply(100).toUint8().updateMask(AGB_2010.mask());
+//2005
+var height_2005_ = frt2005.multiply(b).exp().multiply(a).add(c).toUint8();
+var height_2005 = height_2005_.updateMask(height_2005_.gt(2));
+var height_recover2005_ratio = height_2005.float().divide(forest_height2000.float()).multiply(100).toUint8().updateMask(height_2005.mask());
+var AGB_2005_=  height_2005.float().pow(e).multiply(d).add(0.1).multiply(10).toUint8();
+var AGB_2005 = AGB_2005_.updateMask(AGB_2005_.gt(0));
+var AGB_recover2005_ratio = AGB_2005.float().divide(AGB_2000_reference.float()).multiply(100).toUint8().updateMask(AGB_2005.mask());
+
+//map forest height and AGB regowth rate
+//2020
+var height_recover_rate2020 = forest_recover_time.multiply(b).exp().multiply(a).multiply(b).add(0.1).multiply(10).toUint8();
+var AGB_recover_rate2020 = forest_recover_time.multiply(b).exp().multiply(d).multiply(a).multiply(b).multiply(e).multiply
+      (forest_recover_time.multiply(b).exp().multiply(a).add(c).pow(e - 1)).add(0.1).multiply(10).toUint8();
+//2015
+var height_recover_rate2015 = frt2015.multiply(b).exp().multiply(a).multiply(b).add(0.1).multiply(10).toUint8();
+var AGB_recover_rate2015 = frt2015.multiply(b).exp().multiply(d).multiply(a).multiply(b).multiply(e).multiply
+      (frt2015.multiply(b).exp().multiply(a).add(c).pow(e - 1)).add(0.1).multiply(10).toUint8();
+//2010
+var height_recover_rate2010 = frt2010.multiply(b).exp().multiply(a).multiply(b).add(0.1).multiply(10).toUint8();
+var AGB_recover_rate2010 = frt2010.multiply(b).exp().multiply(d).multiply(a).multiply(b).multiply(e).multiply
+      (frt2010.multiply(b).exp().multiply(a).add(c).pow(e - 1)).add(0.1).multiply(10).toUint8();
+//2005
+var height_recover_rate2005 = frt2005.multiply(b).exp().multiply(a).multiply(b).add(0.1).multiply(10).toUint8();
+var AGB_recover_rate2005 = frt2005.multiply(b).exp().multiply(d).multiply(a).multiply(b).multiply(e).multiply
+      (frt2005.multiply(b).exp().multiply(a).add(c).pow(e - 1)).add(0.1).multiply(10).toUint8();
+
+//add bands
+var height_regrowth = recover_type2020.addBands([
+                    height_recover2020_ratio, height_recover2015_ratio, height_recover2010_ratio, height_recover2005_ratio,
+                    height_recover_rate2020, height_recover_rate2015, height_recover_rate2010, height_recover_rate2005,]).rename([
+                    'Regrowth_type_2020',
+                    'Height_regrowth_ratio_2020', 'Height_regrowth_ratio_2015', 'Height_regrowth_ratio_2010', 'Height_regrowth_ratio_2005',
+                    'Height_regrowth_rate_2020', 'Height_regrowth_rate_2015', 'Height_regrowth_rate_2010', 'Height_regrowth_rate_2005']);
+var AGB_regrowth = recover_type2020.addBands([
+                    AGB_recover2020_ratio, AGB_recover2015_ratio, AGB_recover2010_ratio, AGB_recover2005_ratio,
+                    AGB_recover_rate2020, AGB_recover_rate2015, AGB_recover_rate2010, AGB_recover_rate2005,]).rename([
+                    'Regrowth_type_2020',
+                    'AGB_regrowth_ratio_2020', 'AGB_regrowth_ratio_2015', 'AGB_regrowth_ratio_2010', 'AGB_regrowth_ratio_2005',
+                    'AGB_regrowth_rate_2020', 'AGB_regrowth_rate_2015', 'AGB_regrowth_rate_2010', 'AGB_regrowth_rate_2005',]);
 
 //****South_America****
 //map forest height and AGB regowth ratio
-var a = -25.06; var b = -0.1602; var c = 18.01; var d = 0.0541; var e = 1.894;
+var a = -24.34; var b = -0.0477; var c = 28.03; var d = 0.0541; var e = 1.894;
 var AGB_2000_reference= forest_height2000.updateMask(height_2020.mask()).pow(e).multiply(d).multiply(10);
 //2020
 var height_2020_my_ = forest_recover_time.multiply(b).exp().multiply(a).add(c).toUint8();
@@ -626,44 +597,6 @@ var AGB_regrowth = recover_type2020.addBands([
                     'Regrowth_type_2020',
                     'AGB_regrowth_ratio_2020', 'AGB_regrowth_ratio_2015', 'AGB_regrowth_ratio_2010', 'AGB_regrowth_ratio_2005',
                     'AGB_regrowth_rate_2020', 'AGB_regrowth_rate_2015', 'AGB_regrowth_rate_2010', 'AGB_regrowth_rate_2005',]);
-
-//export area1
-var lonMin = -80; var lonMax = -30; 
-var latMin = -30; var latMax = 10; 
-for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < latMax; lat += 10) {
-    var blockGeometry = ee.Geometry.Rectangle([lon, lat, lon + 10, lat + 10]);
-    var clipped_height_regrowth = height_regrowth.clip(blockGeometry);
-    var clipped_AGB_regrowth = AGB_regrowth.clip(blockGeometry);
-    var clipped_LAI_regrowth = LAI_regrowth.clip(blockGeometry);
-    var clipped_FPAR_regrowth = FPAR_regrowth.clip(blockGeometry);
-    var direction = '';if (lat >= 0) {direction += 'N' + lat ;} else {direction += 'S' + -lat;} if (lon >= 0) {direction += '_E'  + lon;} else {direction += '_W' + -lon ;}
-    var export1 = {image: clipped_height_regrowth,description: 'South_America_Height_regrowth_' + direction,
-    folder: 'South_America_Height_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export1);
-    var export2 = {image: clipped_AGB_regrowth,description: 'South_America_AGB_regrowth_' + direction,
-    folder: 'South_America_AGB_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export2);
-    var export3 = {image: clipped_LAI_regrowth,description: 'South_America_LAI_regrowth_' + direction,
-    folder: 'South_America_LAI_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export3);
-    var export4 = {image: clipped_FPAR_regrowth,description: 'South_America_FPAR_regrowth_' + direction,
-    folder: 'South_America_FPAR_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export4);}}
-
-//export area2
-var lonMin = -110; var lonMax = -80; 
-var latMin = 10; var latMax = 30; 
-for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < latMax; lat += 10) {
-    var blockGeometry = ee.Geometry.Rectangle([lon, lat, lon + 10, lat + 10]);
-    var clipped_height_regrowth = height_regrowth.clip(blockGeometry);
-    var clipped_AGB_regrowth = AGB_regrowth.clip(blockGeometry);
-    var clipped_LAI_regrowth = LAI_regrowth.clip(blockGeometry);
-    var clipped_FPAR_regrowth = FPAR_regrowth.clip(blockGeometry);
-    var direction = '';if (lat >= 0) {direction += 'N' + lat ;} else {direction += 'S' + -lat;} if (lon >= 0) {direction += '_E'  + lon;} else {direction += '_W' + -lon ;}
-    var export1 = {image: clipped_height_regrowth,description: 'South_America_Height_regrowth_' + direction,
-    folder: 'South_America_Height_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export1);
-    var export2 = {image: clipped_AGB_regrowth,description: 'South_America_AGB_regrowth_' + direction,
-    folder: 'South_America_AGB_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export2);
-    var export3 = {image: clipped_LAI_regrowth,description: 'South_America_LAI_regrowth_' + direction,
-    folder: 'South_America_LAI_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export3);
-    var export4 = {image: clipped_FPAR_regrowth,description: 'South_America_FPAR_regrowth_' + direction,
-    folder: 'South_America_FPAR_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export4);}}
 
 //****Africa****
 //map forest height and AGB regowth ratio
@@ -729,44 +662,6 @@ var AGB_regrowth = recover_type2020.addBands([
                     'Regrowth_type_2020',
                     'AGB_regrowth_ratio_2020', 'AGB_regrowth_ratio_2015', 'AGB_regrowth_ratio_2010', 'AGB_regrowth_ratio_2005',
                     'AGB_regrowth_rate_2020', 'AGB_regrowth_rate_2015', 'AGB_regrowth_rate_2010', 'AGB_regrowth_rate_2005',]);
-
-//export area1
-var lonMin = 10; var lonMax = 50; 
-var latMin = -30; var latMax = 10; 
-for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < latMax; lat += 10) {
-    var blockGeometry = ee.Geometry.Rectangle([lon, lat, lon + 10, lat + 10]);
-    var clipped_height_regrowth = height_regrowth.clip(blockGeometry);
-    var clipped_AGB_regrowth = AGB_regrowth.clip(blockGeometry);
-    var clipped_LAI_regrowth = LAI_regrowth.clip(blockGeometry);
-    var clipped_FPAR_regrowth = FPAR_regrowth.clip(blockGeometry);
-    var direction = '';if (lat >= 0) {direction += 'N' + lat ;} else {direction += 'S' + -lat;} if (lon >= 0) {direction += '_E'  + lon;} else {direction += '_W' + -lon ;}
-    var export1 = {image: clipped_height_regrowth,description: 'Africa_Height_regrowth_' + direction,
-    folder: 'Africa_Height_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export1);
-    var export2 = {image: clipped_AGB_regrowth,description: 'Africa_AGB_regrowth_' + direction,
-    folder: 'Africa_AGB_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export2);
-    var export3 = {image: clipped_LAI_regrowth,description: 'Africa_LAI_regrowth_' + direction,
-    folder: 'Africa_LAI_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export3);
-    var export4 = {image: clipped_FPAR_regrowth,description: 'Africa_FPAR_regrowth_' + direction,
-    folder: 'Africa_FPAR_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export4);}}
-
-//export area2
-var lonMin = -20; var lonMax = 10;  
-var latMin = 0; var latMax = 10; 
-for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < latMax; lat += 10) {
-    var blockGeometry = ee.Geometry.Rectangle([lon, lat, lon + 10, lat + 10]);
-    var clipped_height_regrowth = height_regrowth.clip(blockGeometry);
-    var clipped_AGB_regrowth = AGB_regrowth.clip(blockGeometry);
-    var clipped_LAI_regrowth = LAI_regrowth.clip(blockGeometry);
-    var clipped_FPAR_regrowth = FPAR_regrowth.clip(blockGeometry);
-    var direction = '';if (lat >= 0) {direction += 'N' + lat ;} else {direction += 'S' + -lat;} if (lon >= 0) {direction += '_E'  + lon;} else {direction += '_W' + -lon ;}
-    var export1 = {image: clipped_height_regrowth,description: 'Africa_Height_regrowth_' + direction,
-    folder: 'Africa_Height_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export1);
-    var export2 = {image: clipped_AGB_regrowth,description: 'Africa_AGB_regrowth_' + direction,
-    folder: 'Africa_AGB_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export2);
-    var export3 = {image: clipped_LAI_regrowth,description: 'Africa_LAI_regrowth_' + direction,
-    folder: 'Africa_LAI_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export3);
-    var export4 = {image: clipped_FPAR_regrowth,description: 'Africa_FPAR_regrowth_' + direction,
-    folder: 'Africa_FPAR_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export4);}}
 
 //****North_America****
 //calculate virgin forest height
@@ -1016,42 +911,4 @@ var FPAR_regrowth = canada_USA_recover_type2020.addBands([
                     'FPAR_regrowth_ratio_2020', 'FPAR_regrowth_ratio_2015', 'FPAR_regrowth_ratio_2010', 'FPAR_regrowth_ratio_2005',
                     'FPAR_regrowth_ratio_2000', 'FPAR_regrowth_ratio_1995', 'FPAR_regrowth_ratio_1990',
                     'FPAR_regrowth_rate_2020', 'FPAR_regrowth_rate_2015', 'FPAR_regrowth_rate_2010', 'FPAR_regrowth_rate_2005',
-                    'FPAR_regrowth_rate_2000', 'FPAR_regrowth_rate_1995', 'FPAR_regrowth_rate_1990']);        
-
-//export area1
-var lonMin = -130; var lonMax = -60; 
-var latMin = 30; var latMax = 60; 
-for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < latMax; lat += 10) {
-    var blockGeometry = ee.Geometry.Rectangle([lon, lat, lon + 10, lat + 10]);
-    var clipped_height_regrowth = height_regrowth.clip(blockGeometry);
-    var clipped_AGB_regrowth = AGB_regrowth.clip(blockGeometry);
-    var clipped_LAI_regrowth = LAI_regrowth.clip(blockGeometry);
-    var clipped_FPAR_regrowth = FPAR_regrowth.clip(blockGeometry);
-    var direction = '';if (lat >= 0) {direction += 'N' + lat ;} else {direction += 'S' + -lat;} if (lon >= 0) {direction += '_E'  + lon;} else {direction += '_W' + -lon ;}
-    var export1 = {image: clipped_height_regrowth,description: 'North_America_Height_regrowth_' + direction,
-    folder: 'North_America_Height_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export1);
-    var export2 = {image: clipped_AGB_regrowth,description: 'North_America_AGB_regrowth_' + direction,
-    folder: 'North_America_AGB_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export2);
-    var export3 = {image: clipped_LAI_regrowth,description: 'North_America_LAI_regrowth_' + direction,
-    folder: 'North_America_LAI_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export3);
-    var export4 = {image: clipped_FPAR_regrowth,description: 'North_America_FPAR_regrowth_' + direction,
-    folder: 'North_America_FPAR_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export4);}}
-
-//export area2
-var lonMin = -160; var lonMax = -130;  
-var latMin = 60; var latMax = 70; 
-for (var lon = lonMin; lon < lonMax; lon += 10) {for (var lat = latMin; lat < latMax; lat += 10) {
-    var blockGeometry = ee.Geometry.Rectangle([lon, lat, lon + 10, lat + 10]);
-    var clipped_height_regrowth = height_regrowth.clip(blockGeometry);
-    var clipped_AGB_regrowth = AGB_regrowth.clip(blockGeometry);
-    var clipped_LAI_regrowth = LAI_regrowth.clip(blockGeometry);
-    var clipped_FPAR_regrowth = FPAR_regrowth.clip(blockGeometry);
-    var direction = '';if (lat >= 0) {direction += 'N' + lat ;} else {direction += 'S' + -lat;} if (lon >= 0) {direction += '_E'  + lon;} else {direction += '_W' + -lon ;}
-    var export1 = {image: clipped_height_regrowth,description: 'North_America_Height_regrowth_' + direction,
-    folder: 'North_America_Height_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export1);
-    var export2 = {image: clipped_AGB_regrowth,description: 'North_America_AGB_regrowth_' + direction,
-    folder: 'North_America_AGB_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export2);
-    var export3 = {image: clipped_LAI_regrowth,description: 'North_America_LAI_regrowth_' + direction,
-    folder: 'North_America_LAI_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export3);
-    var export4 = {image: clipped_FPAR_regrowth,description: 'North_America_FPAR_regrowth_' + direction,
-    folder: 'North_America_FPAR_regrowth30',scale: 30, crs: 'EPSG:4326', maxPixels: 1e13, region: blockGeometry,skipEmptyTiles: true};Export.image.toDrive(export4);}}
+                    'FPAR_regrowth_rate_2000', 'FPAR_regrowth_rate_1995', 'FPAR_regrowth_rate_1990']);
