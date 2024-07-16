@@ -4,13 +4,10 @@ We employed multiple remotely sensed datasets to generate the first global maps 
 <img width="800" alt="恢复数据结构" src="https://github.com/user-attachments/assets/2c9e05e3-4cc6-4d6a-9353-03b7f3e9b0f5">
 
 ## Regrowth land type in 2020 following wildfires between 2000 and 2019
-<img width="1000" alt="Regrowth_type_" src="https://github.com/JinlongZang/FireRecovery/assets/154531389/11d24297-fcaf-4337-beca-38372ee7e959">
-![Regrowth_type_](https://github.com/user-attachments/assets/1b1fbff8-2ac5-4329-89f2-4976286ba05c)
+<img width="1000" alt="Regrowth_type_" src="https://github.com/user-attachments/assets/1b1fbff8-2ac5-4329-89f2-4976286ba05c">
 
 ## Regrowth ratio of forest height, AGB, LAI, and FPAR in 2020 following wildfires
-<img width="1000" alt="Regrowth_ratio_" src="https://github.com/JinlongZang/FireRecovery/assets/154531389/d7d05eaa-c363-4383-8f5a-9e958a41cd22">
-![Regrowth_ratio_2020](https://github.com/user-attachments/assets/64eb0a4f-0cde-48c1-92bd-553b60360485)
+<img width="1000" alt="Regrowth_ratio_" src="https://github.com/user-attachments/assets/64eb0a4f-0cde-48c1-92bd-553b60360485">
 
 ## Regrowth rate of forest height, AGB, LAI, and FPAR in 2020 following wildfires
-<img width="1000" alt="Regrowth_rate_" src="https://github.com/JinlongZang/FireRecovery/assets/154531389/c8fdbae1-c796-410a-a75b-7de0424188d7">
-![Regrowth_rate_2020](https://github.com/user-attachments/assets/67ba84df-93a3-496a-b991-117eae8e896a)
+<img width="1000" alt="Regrowth_rate_" src="https://github.com/user-attachments/assets/67ba84df-93a3-496a-b991-117eae8e896a">
