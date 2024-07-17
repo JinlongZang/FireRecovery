@@ -79,7 +79,7 @@ var FNF3 = FNF3_.reduceResolution({reducer: ee.Reducer.mean(), bestEffort: true,
                 .reproject({crs: 'EPSG:4326',scale: 30});
 //1_forest; 2_Non Forest; 3_Water
 var forest_2007 = FNF3.updateMask(FNF3.eq(1));
-var forest_fire = loss_due_to_fire2019.updateMask(forest_2007.mask());
+var forest_fire = recover_time.updateMask(forest_2007.mask());
 var canada_USA_forest_fire = recover_time_canada_USA2.updateMask(forest_2007.mask());
 
 ////import Global 4-class PALSAR-2/PALSAR Forest/Non-Forest Map to derive forest recover areas
